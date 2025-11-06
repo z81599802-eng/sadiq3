@@ -120,19 +120,49 @@ function initDashboardShell() {
     contentContainer.appendChild(frame);
   };
 
+  const sidebarFocusableElements = Array.from(
+    sidebar.querySelectorAll('a, button, [role="button"], input, select, textarea')
+  );
+
   const setSidebarState = (nextState) => {
+    const isOpen = nextState === 'open';
     shell.dataset.sidebarState = nextState;
-    toggle.setAttribute('aria-expanded', String(nextState === 'open'));
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    sidebar.setAttribute('aria-hidden', String(!isOpen));
+
+    sidebarFocusableElements.forEach((element) => {
+      if (isOpen) {
+        if (Object.prototype.hasOwnProperty.call(element.dataset, 'prevTabindex')) {
+          const previousValue = element.dataset.prevTabindex;
+          if (previousValue) {
+            element.setAttribute('tabindex', previousValue);
+          } else {
+            element.removeAttribute('tabindex');
+          }
+          delete element.dataset.prevTabindex;
+        } else {
+          element.removeAttribute('tabindex');
+        }
+      } else {
+        if (element.hasAttribute('tabindex')) {
+          element.dataset.prevTabindex = element.getAttribute('tabindex') || '';
+        }
+        element.setAttribute('tabindex', '-1');
+      }
+    });
+
     if (overlay) {
-      overlay.setAttribute('aria-hidden', String(!(isMobileView() && nextState === 'open')));
+      overlay.setAttribute('aria-hidden', String(!(isMobileView() && isOpen)));
     }
 
     const desktopIcon = toggle.querySelector('.icon-desktop');
     if (desktopIcon) {
-      desktopIcon.setAttribute('data-lucide', nextState === 'open' ? 'panel-left-close' : 'panel-left-open');
+      desktopIcon.setAttribute('data-lucide', isOpen ? 'panel-left-close' : 'panel-left-open');
       updateLucideIcons();
     }
   };
+
+  setSidebarState(shell.dataset.sidebarState === 'closed' ? 'closed' : 'open');
 
   navButtons.forEach((button) => {
     button.addEventListener('click', () => {
