@@ -63,12 +63,15 @@
     });
   }
 
-  window.addEventListener('scroll', () => {
+  const updateBackToTopVisibility = () => {
     if (!backToTopBtn) return;
     const shouldShow = window.scrollY > 400;
     backToTopBtn.style.opacity = shouldShow ? '1' : '0';
     backToTopBtn.style.pointerEvents = shouldShow ? 'auto' : 'none';
-  });
+  };
+
+  window.addEventListener('scroll', updateBackToTopVisibility);
+  updateBackToTopVisibility();
 
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
