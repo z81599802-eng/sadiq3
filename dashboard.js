@@ -70,8 +70,19 @@ function initDashboardShell() {
   const toggle = document.querySelector('.sidebar-toggle');
   const overlay = document.querySelector('[data-sidebar-overlay]');
   const mainArea = document.querySelector('.main-area');
+  const mainHeader = document.querySelector('.main-header');
+  const rootElement = document.documentElement;
 
-  if (!shell || !sidebar || navButtons.length === 0 || !pageTitle || !contentContainer || !toggle || !mainArea) {
+  if (
+    !shell ||
+    !sidebar ||
+    navButtons.length === 0 ||
+    !pageTitle ||
+    !contentContainer ||
+    !toggle ||
+    !mainArea ||
+    !mainHeader
+  ) {
     return;
   }
 
@@ -124,6 +135,23 @@ function initDashboardShell() {
     sidebar.querySelectorAll('a, button, [role="button"], input, select, textarea')
   );
 
+  const updateHeaderHeightVar = () => {
+    const measuredHeight = mainHeader.offsetHeight;
+    if (Number.isFinite(measuredHeight) && measuredHeight > 0) {
+      rootElement.style.setProperty('--header-height', `${measuredHeight}px`);
+    }
+  };
+
+  const headerResizeObserver = typeof ResizeObserver === 'function'
+    ? new ResizeObserver(() => updateHeaderHeightVar())
+    : null;
+
+  headerResizeObserver?.observe(mainHeader);
+
+  window.addEventListener('beforeunload', () => {
+    headerResizeObserver?.disconnect();
+  });
+
   const setSidebarState = (nextState) => {
     const isOpen = nextState === 'open';
     shell.dataset.sidebarState = nextState;
@@ -162,6 +190,8 @@ function initDashboardShell() {
       desktopIcon.setAttribute('data-lucide', isOpen ? 'panel-left-close' : 'panel-left-open');
       updateLucideIcons();
     }
+
+    updateHeaderHeightVar();
   };
 
   setSidebarState(shell.dataset.sidebarState === 'closed' ? 'closed' : 'open');
@@ -216,7 +246,11 @@ function initDashboardShell() {
       return;
     }
 
-    if (sidebar.contains(event.target) || toggle.contains(event.target)) {
+    const eventPath = typeof event.composedPath === 'function' ? event.composedPath() : [];
+    const interactedWithSidebar = sidebar.contains(event.target) || eventPath.includes(sidebar);
+    const interactedWithToggle = toggle.contains(event.target) || eventPath.includes(toggle);
+
+    if (interactedWithSidebar || interactedWithToggle) {
       return;
     }
 
@@ -232,11 +266,16 @@ function initDashboardShell() {
 
     const currentState = shell.dataset.sidebarState === 'open' ? 'open' : 'closed';
     setSidebarState(currentState);
+    updateHeaderHeightVar();
   });
 
   const defaultPage = navButtons.find((btn) => btn.classList.contains('is-active'))?.dataset.page || 'dashboard';
   renderPageContent(defaultPage);
   updateLucideIcons();
+  updateHeaderHeightVar();
+  window.addEventListener('load', () => {
+    updateHeaderHeightVar();
+  });
 
   if (isMobileView()) {
     setSidebarState('closed');
