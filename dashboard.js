@@ -216,7 +216,11 @@ function initDashboardShell() {
       return;
     }
 
-    if (sidebar.contains(event.target) || toggle.contains(event.target)) {
+    const eventPath = typeof event.composedPath === 'function' ? event.composedPath() : [];
+    const interactedWithSidebar = sidebar.contains(event.target) || eventPath.includes(sidebar);
+    const interactedWithToggle = toggle.contains(event.target) || eventPath.includes(toggle);
+
+    if (interactedWithSidebar || interactedWithToggle) {
       return;
     }
 
