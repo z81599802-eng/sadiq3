@@ -157,6 +157,7 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 100vh;
 }
 
 .main-header {
@@ -205,6 +206,34 @@ body {
   color: var(--color-primary-dark);
 }
 
+@media (max-width: 768px) {
+  .main-header {
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      'toggle logout'
+      'title title';
+    row-gap: 0.75rem;
+    align-content: center;
+    height: auto;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .sidebar-toggle {
+    grid-area: toggle;
+  }
+
+  .page-title {
+    grid-area: title;
+    text-align: left;
+  }
+
+  .btn-logout {
+    grid-area: logout;
+    justify-self: end;
+  }
+}
+
 .btn-logout {
   display: inline-flex;
   align-items: center;
@@ -237,6 +266,8 @@ body {
   display: flex;
   padding: 0;
   position: relative;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .page-content {
@@ -244,14 +275,18 @@ body {
   display: flex;
   width: 100%;
   height: 100%;
+  min-height: 0;
   background: var(--color-surface);
+  overflow: auto;
 }
 
 .dashboard-frame {
+  --dashboard-viewport: calc(100vh - var(--header-height));
   border: none;
   display: block;
   width: 100%;
   height: 100%;
+  min-height: clamp(360px, var(--dashboard-viewport), 100vh);
   border-radius: 0;
   box-shadow: none;
   background: #ffffff;
@@ -317,7 +352,7 @@ body {
   }
 }
 
-@media (max-width: 840px) {
+@media (min-width: 769px) and (max-width: 840px) {
   .dashboard-shell {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -375,5 +410,15 @@ body {
 
   .page-title {
     font-size: 1.15rem;
+  }
+}
+
+@supports (height: 100dvh) {
+  .main-area {
+    min-height: 100dvh;
+  }
+
+  .dashboard-frame {
+    --dashboard-viewport: calc(100dvh - var(--header-height));
   }
 }
