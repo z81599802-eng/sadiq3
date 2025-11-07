@@ -352,7 +352,7 @@ body {
   }
 }
 
-@media (max-width: 840px) {
+@media (min-width: 769px) and (max-width: 840px) {
   .dashboard-shell {
     grid-template-columns: minmax(0, 1fr);
   }
