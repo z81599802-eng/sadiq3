@@ -208,12 +208,11 @@ body {
 
 @media (max-width: 768px) {
   .main-header {
-    grid-template-columns: auto auto;
-    grid-template-areas:
-      'toggle logout'
-      'title title';
-    row-gap: 0.75rem;
-    align-content: center;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'toggle title logout';
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    align-items: center;
     height: auto;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -226,6 +225,7 @@ body {
   .page-title {
     grid-area: title;
     text-align: left;
+    align-self: center;
   }
 
   .btn-logout {
@@ -416,6 +416,23 @@ body {
 
   .page-title {
     font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .main-header {
+    column-gap: 0.75rem;
+  }
+
+  .btn-logout {
+    padding: 0.55rem;
+    border-radius: 12px;
+    min-width: 44px;
+    gap: 0;
+  }
+
+  .btn-logout span {
+    display: none;
   }
 }
 
