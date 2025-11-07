@@ -129,6 +129,8 @@ function initDashboardShell() {
     shell.dataset.sidebarState = nextState;
     toggle.setAttribute('aria-expanded', String(isOpen));
     sidebar.setAttribute('aria-hidden', String(!isOpen));
+    const shouldLockScroll = isMobileView() && isOpen;
+    document.body.classList.toggle('sidebar-open', shouldLockScroll);
 
     sidebarFocusableElements.forEach((element) => {
       if (isOpen) {
@@ -223,6 +225,7 @@ function initDashboardShell() {
 
   window.addEventListener('resize', () => {
     if (!isMobileView()) {
+      document.body.classList.remove('sidebar-open');
       setSidebarState('open');
       return;
     }
