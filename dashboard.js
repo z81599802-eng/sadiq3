@@ -1,5 +1,811 @@
 const DASHBOARD_URL = 'https://bi.wissenglanz.in/public/dashboard/1fe01e7d-b155-4054-bc71-d55799eb9b22';
 
+const CAMPAIGN_DATA = [
+  {
+    name: 'A2 - B0F63GWCMJ - PAT',
+    id: '292521029217110',
+    status: 'Enabled',
+    dailyBudget: 200,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:04',
+    action: 'Pause Update',
+    isSelected: true,
+  },
+  {
+    name: 'A2W - B0F63GWCMJ - PAT',
+    id: '470103395458909',
+    status: 'Enabled',
+    dailyBudget: 100,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:04',
+    action: 'Pause Update',
+  },
+  {
+    name: 'Campaign with presets - B0FM3KK3S9 - 12/11/2025 18:35:42.895',
+    id: '450713614110696',
+    status: 'Enabled',
+    dailyBudget: 50,
+    budgetUsedPercent: 19,
+    updatedAt: '2025-11-13 16:24',
+    action: 'Pause Update',
+  },
+  {
+    name: 'CG - 1 kg ghee - EXT',
+    id: '285997086560150',
+    status: 'Enabled',
+    dailyBudget: 200,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:03',
+    action: 'Pause Update',
+  },
+  {
+    name: 'CG - 1kg ghee - EXT',
+    id: '328655310802192',
+    status: 'Enabled',
+    dailyBudget: 200,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:03',
+    action: 'Pause Update',
+  },
+  {
+    name: 'CG - a2 ghee 1 litre offer - EXT',
+    id: '464237842896578',
+    status: 'Enabled',
+    dailyBudget: 200,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:03',
+    action: 'Pause Update',
+  },
+  {
+    name: 'CG - aroma ghee 500ml - EXT',
+    id: '441064906964837',
+    status: 'Enabled',
+    dailyBudget: 200,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:03',
+    action: 'Pause Update',
+  },
+  {
+    name: 'CG - best ghee cow - EXT',
+    id: '391085913169533',
+    status: 'Enabled',
+    dailyBudget: 200,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:03',
+    action: 'Pause Update',
+  },
+  {
+    name: 'CG - best ghee - EXT',
+    id: '292337863324167',
+    status: 'Enabled',
+    dailyBudget: 200,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:03',
+    action: 'Pause Update',
+  },
+  {
+    name: 'CG - cow ghee 1 litre offer - EXT',
+    id: '423889340608413',
+    status: 'Enabled',
+    dailyBudget: 200,
+    budgetUsedPercent: null,
+    updatedAt: '2025-11-13 00:03',
+    action: 'Pause Update',
+  },
+];
+
+const PROFILE_OPTIONS = [
+  'Demo Retailer',
+  'Haus & Co. Stores',
+  'North Hub Partners',
+  'Seasonal Specials',
+];
+
+const CAMPAIGN_OPTIONS = [
+  'A2 - B0F63GWCMJ - PAT | 292521029217110',
+  'A2W - B0F63GWCMJ - PAT | 470103395458909',
+  'Campaign with presets - B0FM3KK3S9 - 12/11/2025 18:35:42.895',
+  'CG - 1 kg ghee - EXT | 285997086560150',
+];
+
+const DAY_CONFIG = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+
+const CAMPAIGN_PAGINATION = {
+  currentPage: 1,
+  totalPages: 13,
+};
+
+function refreshLucideIcons() {
+  if (typeof window !== 'undefined' && window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+}
+
+function formatCurrency(amount) {
+  const formatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return formatter.format(amount);
+}
+
+function formatDisplayTime(value) {
+  const [hour, minute] = value.split(':').map((part) => Number(part));
+  const period = hour >= 12 ? 'PM' : 'AM';
+  const normalizedHour = hour % 12 || 12;
+  return `${normalizedHour}:${minute.toString().padStart(2, '0')} ${period}`;
+}
+
+function buildTimeOptions() {
+  const steps = [];
+  for (let hour = 0; hour < 24; hour += 1) {
+    for (const minute of [0, 30]) {
+      const value = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+      steps.push({
+        value,
+        label: formatDisplayTime(value),
+      });
+    }
+  }
+  return steps;
+}
+
+const TIME_OPTIONS = buildTimeOptions();
+
+function createCampaignPage() {
+  const container = document.createElement('div');
+  container.className = 'campaign-page';
+
+  const heroBlock = buildCampaignHero();
+  container.appendChild(heroBlock.section);
+
+  const filterBlock = buildCampaignFilters();
+  container.appendChild(filterBlock.section);
+
+  const tableBlock = buildCampaignTableSection();
+  container.appendChild(tableBlock.section);
+
+  const updateBlock = buildCampaignUpdateSection();
+  container.appendChild(updateBlock.section);
+
+  const scheduleBlock = buildCampaignScheduleSection();
+  container.appendChild(scheduleBlock.section);
+
+  initHeroScheduleAction(heroBlock.scheduleButton, scheduleBlock.section);
+  initCampaignFilters(filterBlock.form, tableBlock.tableBody, tableBlock.paginationLabel);
+  initUpdateForm(updateBlock.form);
+  initScheduleInteractions(scheduleBlock.section);
+
+  refreshLucideIcons();
+  return container;
+}
+
+function buildCampaignHero() {
+  const section = document.createElement('section');
+  section.className = 'campaign-hero';
+  section.innerHTML = `
+    <div class="campaign-hero__text">
+      <p class="eyebrow-text">Sponsored Products campaigns</p>
+      <h2>Review campaign status, track budget usage, and push updates directly to Amazon Ads.</h2>
+      <p>Bring transparency to every campaign touchpoint with a single dashboard designed for commerce operators.</p>
+      <div class="campaign-hero__actions">
+        <button type="button" class="btn btn-secondary" data-open-schedule aria-controls="campaign-schedule" aria-expanded="false">
+          <i data-lucide="clock-4" aria-hidden="true"></i>
+          <span>Scheduled OFF campaign</span>
+        </button>
+      </div>
+    </div>
+  `;
+
+  return {
+    section,
+    scheduleButton: section.querySelector('[data-open-schedule]'),
+  };
+}
+
+function buildCampaignFilters() {
+  const section = document.createElement('section');
+  section.className = 'campaign-filters';
+  section.innerHTML = `
+    <form class="filters-form" data-campaign-filter-form novalidate>
+      <div class="filters-row">
+        <label class="form-field">
+          <span>Search campaigns</span>
+          <input type="search" name="query" placeholder="Search by name or campaign ID" autocomplete="off" inputmode="search" />
+        </label>
+        <div class="filters-actions">
+          <button type="submit" class="btn btn-primary">Search</button>
+          <button type="button" class="btn btn-ghost" data-clear-filters>Clear filters</button>
+        </div>
+      </div>
+      <div class="filters-grid">
+        <label class="form-field">
+          <span>Status</span>
+          <div class="select-wrapper">
+            <select name="status">
+              <option value="all">All statuses</option>
+              <option value="Enabled">Enabled</option>
+            </select>
+          </div>
+        </label>
+        <fieldset class="form-field">
+          <legend>Daily budget range</legend>
+          <div class="range-inputs">
+            <input type="number" name="budgetMin" placeholder="Min" min="0" step="0.01" inputmode="decimal" />
+            <span>to</span>
+            <input type="number" name="budgetMax" placeholder="Max" min="0" step="0.01" inputmode="decimal" />
+          </div>
+          <small>Leave blank to ignore either boundary.</small>
+        </fieldset>
+        <fieldset class="form-field">
+          <legend>Budget exhausted (%) range</legend>
+          <div class="range-inputs">
+            <input type="number" name="usedMin" placeholder="Min" min="0" max="900" step="1" inputmode="decimal" />
+            <span>to</span>
+            <input type="number" name="usedMax" placeholder="Max" min="0" max="900" step="1" inputmode="decimal" />
+          </div>
+          <small>Leave blank to ignore either boundary.</small>
+        </fieldset>
+      </div>
+    </form>
+  `;
+
+  return {
+    section,
+    form: section.querySelector('[data-campaign-filter-form]'),
+  };
+}
+
+function buildCampaignTableSection() {
+  const section = document.createElement('section');
+  section.className = 'campaign-table-section';
+  section.innerHTML = `
+    <div class="section-heading">
+      <h3>Status overview</h3>
+      <p>Track individual Sponsored Products campaigns, budgets, and live states.</p>
+    </div>
+    <div class="table-wrapper">
+      <table class="campaign-table">
+        <caption class="sr-only">Sponsored Products campaign activity</caption>
+        <thead>
+          <tr>
+            <th scope="col">Campaign</th>
+            <th scope="col">Status</th>
+            <th scope="col">Daily Budget</th>
+            <th scope="col">Budget Used</th>
+            <th scope="col">Updated</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody data-campaign-table-body></tbody>
+      </table>
+    </div>
+    <div class="table-pagination">
+      <span data-pagination-label>Page ${CAMPAIGN_PAGINATION.currentPage} of ${CAMPAIGN_PAGINATION.totalPages}</span>
+      <div class="pagination-actions">
+        <button type="button" class="btn btn-ghost" disabled>Previous</button>
+        <button type="button" class="btn btn-ghost" disabled>Next</button>
+      </div>
+    </div>
+  `;
+
+  return {
+    section,
+    tableBody: section.querySelector('[data-campaign-table-body]'),
+    paginationLabel: section.querySelector('[data-pagination-label]'),
+  };
+}
+
+function buildCampaignUpdateSection() {
+  const section = document.createElement('section');
+  section.className = 'campaign-update';
+  section.innerHTML = `
+    <div class="section-heading">
+      <div>
+        <h3>Update campaign</h3>
+        <p>Currently editing <strong>A2 - B0F63GWCMJ - PAT</strong>.</p>
+      </div>
+      <span class="campaign-id-pill">ID 292521029217110</span>
+    </div>
+    <form class="update-form" data-update-form novalidate>
+      <label class="form-field">
+        <span>Campaign</span>
+        <div class="select-wrapper">
+          <select name="campaign">
+            ${CAMPAIGN_OPTIONS.map((option) => `<option value="${option}">${option}</option>`).join('')}
+          </select>
+        </div>
+        <small>Select the Sponsored Products campaign to update.</small>
+      </label>
+      <label class="form-field">
+        <span>Daily budget</span>
+        <input type="number" name="dailyBudget" min="0" step="0.01" value="200.00" placeholder="100" inputmode="decimal" />
+        <small>Budget amount in the campaign's currency.</small>
+      </label>
+      <label class="form-field">
+        <span>Budget type</span>
+        <div class="select-wrapper">
+          <select name="budgetType">
+            <option value="daily">Daily</option>
+            <option value="lifetime">Lifetime</option>
+          </select>
+        </div>
+      </label>
+      <label class="form-field">
+        <span>Dynamic bidding strategy</span>
+        <div class="select-wrapper">
+          <select name="biddingStrategy">
+            <option value="legacy-sales">Dynamic bidding: legacy for sales</option>
+            <option value="up-down">Dynamic bidding: up and down</option>
+            <option value="down-only">Dynamic bidding: down only</option>
+          </select>
+        </div>
+      </label>
+      <label class="form-field">
+        <span>Top of search adjustment (%)</span>
+        <input type="number" name="topSearch" min="0" max="900" step="1" value="0" />
+        <small>Optional: increase bids for top of search placement (0-900).</small>
+      </label>
+      <label class="form-field">
+        <span>Product page adjustment (%)</span>
+        <input type="number" name="productPage" min="0" max="900" step="1" value="0" />
+        <small>Optional: increase bids for product page placement (0-900).</small>
+      </label>
+      <label class="form-field">
+        <span>Rest of search adjustment (%)</span>
+        <input type="number" name="restOfSearch" min="0" max="900" step="1" value="0" />
+        <small>Optional: increase bids for rest of search placement (0-900).</small>
+      </label>
+      <label class="checkbox-field">
+        <input type="checkbox" name="returnRepresentation" checked />
+        <span>
+          Return updated campaign details
+          <small>Request the full campaign representation in the API response.</small>
+        </span>
+      </label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+  `;
+
+  return {
+    section,
+    form: section.querySelector('[data-update-form]'),
+  };
+}
+
+function buildCampaignScheduleSection() {
+  const section = document.createElement('section');
+  section.className = 'campaign-schedule';
+  section.id = 'campaign-schedule';
+  section.hidden = true;
+  section.innerHTML = `
+    <div class="section-heading">
+      <div>
+        <h3>Automate campaign hours</h3>
+        <p>Choose weekly downtime windows where campaigns pause automatically. Outside of the selected windows your campaign stays active.</p>
+      </div>
+    </div>
+    <div class="schedule-form">
+      <label class="form-field">
+        <span>Profile</span>
+        <div class="select-wrapper">
+          <select name="profile">
+            ${PROFILE_OPTIONS.map((option) => `<option value="${option}">${option}</option>`).join('')}
+          </select>
+        </div>
+      </label>
+      <label class="form-field">
+        <span>Campaign</span>
+        <div class="select-wrapper">
+          <select name="scheduledCampaign">
+            ${CAMPAIGN_OPTIONS.map((option) => `<option value="${option}">${option}</option>`).join('')}
+          </select>
+        </div>
+      </label>
+    </div>
+    <div class="downtime-grid" data-downtime-days></div>
+    <div class="form-actions">
+      <button type="button" class="btn btn-primary" data-save-downtime>
+        <i data-lucide="save" aria-hidden="true"></i>
+        <span>Save downtime</span>
+      </button>
+    </div>
+  `;
+
+  return {
+    section,
+  };
+}
+
+function initHeroScheduleAction(button, scheduleSection) {
+  if (!button || !scheduleSection) {
+    return;
+  }
+
+  button.setAttribute('aria-expanded', 'false');
+
+  button.addEventListener('click', () => {
+    scheduleSection.hidden = false;
+    scheduleSection.classList.add('is-visible');
+    scheduleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    button.setAttribute('aria-expanded', 'true');
+  });
+}
+
+function renderCampaignRows(tableBody, rows) {
+  if (!tableBody) {
+    return;
+  }
+
+  tableBody.innerHTML = '';
+
+  if (rows.length === 0) {
+    const emptyRow = document.createElement('tr');
+    const emptyCell = document.createElement('td');
+    emptyCell.colSpan = 6;
+    emptyCell.className = 'table-empty-state';
+    emptyCell.textContent = 'No campaigns match the current filters.';
+    emptyRow.appendChild(emptyCell);
+    tableBody.appendChild(emptyRow);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  rows.forEach((campaign) => {
+    const row = document.createElement('tr');
+
+    const campaignCell = document.createElement('td');
+    campaignCell.innerHTML = `
+      <div class="campaign-title">${campaign.name}</div>
+      <div class="campaign-meta">
+        <span>ID: ${campaign.id}</span>
+        ${campaign.isSelected ? '<span class="campaign-badge">Selected</span>' : ''}
+      </div>
+    `;
+
+    const statusCell = document.createElement('td');
+    statusCell.textContent = campaign.status;
+
+    const budgetCell = document.createElement('td');
+    budgetCell.textContent = formatCurrency(campaign.dailyBudget);
+
+    const usedCell = document.createElement('td');
+    usedCell.textContent = typeof campaign.budgetUsedPercent === 'number'
+      ? `${campaign.budgetUsedPercent}%`
+      : '--';
+
+    const updatedCell = document.createElement('td');
+    updatedCell.textContent = campaign.updatedAt;
+
+    const actionCell = document.createElement('td');
+    const actionButton = document.createElement('button');
+    actionButton.type = 'button';
+    actionButton.className = 'btn btn-ghost btn-small';
+    actionButton.textContent = campaign.action;
+    actionCell.appendChild(actionButton);
+
+    row.append(campaignCell, statusCell, budgetCell, usedCell, updatedCell, actionCell);
+    fragment.appendChild(row);
+  });
+
+  tableBody.appendChild(fragment);
+}
+
+function updatePaginationLabel(labelElement, filteredCount) {
+  if (!labelElement) {
+    return;
+  }
+
+  labelElement.textContent = `Page ${CAMPAIGN_PAGINATION.currentPage} of ${CAMPAIGN_PAGINATION.totalPages} · Showing ${filteredCount} of ${CAMPAIGN_DATA.length}`;
+}
+
+function initCampaignFilters(form, tableBody, paginationLabel) {
+  if (!form || !tableBody) {
+    return;
+  }
+
+  const applyFilters = () => {
+    const formData = new FormData(form);
+    const query = (formData.get('query') || '').toString().trim().toLowerCase();
+    const status = (formData.get('status') || 'all').toString();
+    const minBudget = Number.parseFloat(formData.get('budgetMin'));
+    const maxBudget = Number.parseFloat(formData.get('budgetMax'));
+    const minUsed = Number.parseFloat(formData.get('usedMin'));
+    const maxUsed = Number.parseFloat(formData.get('usedMax'));
+
+    const filtered = CAMPAIGN_DATA.filter((campaign) => {
+      const matchesQuery = !query
+        || campaign.name.toLowerCase().includes(query)
+        || campaign.id.includes(query);
+      const matchesStatus = status === 'all' || campaign.status === status;
+      const matchesBudget = (
+        Number.isNaN(minBudget) || campaign.dailyBudget >= minBudget
+      ) && (
+        Number.isNaN(maxBudget) || campaign.dailyBudget <= maxBudget
+      );
+
+      let matchesUsed = true;
+      if (!Number.isNaN(minUsed) || !Number.isNaN(maxUsed)) {
+        if (typeof campaign.budgetUsedPercent !== 'number') {
+          matchesUsed = false;
+        } else {
+          matchesUsed = (
+            (Number.isNaN(minUsed) || campaign.budgetUsedPercent >= minUsed)
+            && (Number.isNaN(maxUsed) || campaign.budgetUsedPercent <= maxUsed)
+          );
+        }
+      }
+
+      return matchesQuery && matchesStatus && matchesBudget && matchesUsed;
+    });
+
+    renderCampaignRows(tableBody, filtered);
+    updatePaginationLabel(paginationLabel, filtered.length);
+  };
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    applyFilters();
+  });
+
+  form.addEventListener('input', (event) => {
+    if (event.target instanceof HTMLInputElement) {
+      applyFilters();
+    }
+  });
+
+  form.addEventListener('change', (event) => {
+    if (event.target instanceof HTMLSelectElement) {
+      applyFilters();
+    }
+  });
+
+  const clearButton = form.querySelector('[data-clear-filters]');
+  clearButton?.addEventListener('click', () => {
+    form.reset();
+    applyFilters();
+  });
+
+  applyFilters();
+}
+
+function initUpdateForm(form) {
+  if (!form) {
+    return;
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Saving...';
+      window.setTimeout(() => {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Save changes';
+      }, 1000);
+    }
+  });
+}
+
+function initScheduleInteractions(section) {
+  if (!section) {
+    return;
+  }
+
+  const daysContainer = section.querySelector('[data-downtime-days]');
+  if (daysContainer) {
+    DAY_CONFIG.forEach((dayLabel) => {
+      const card = buildDowntimeCard(dayLabel);
+      daysContainer.appendChild(card);
+      initializeDowntimeCard(card);
+    });
+  }
+
+  const saveButton = section.querySelector('[data-save-downtime]');
+  saveButton?.addEventListener('click', () => {
+    if (!(saveButton instanceof HTMLButtonElement)) {
+      return;
+    }
+    saveButton.disabled = true;
+    const originalText = saveButton.textContent || 'Save downtime';
+    saveButton.textContent = 'Saving...';
+    window.setTimeout(() => {
+      saveButton.disabled = false;
+      saveButton.textContent = originalText;
+    }, 1000);
+  });
+}
+
+function buildDowntimeCard(dayLabel) {
+  const card = document.createElement('article');
+  card.className = 'downtime-card';
+  card.dataset.day = dayLabel;
+  card.innerHTML = `
+    <div class="downtime-card__header">
+      <div>
+        <p class="downtime-day">${dayLabel}</p>
+        <p class="downtime-summary" data-window-summary>9:00 AM – 5:00 PM</p>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" data-day-toggle checked />
+        <span class="toggle-slider" aria-hidden="true"></span>
+        <span class="sr-only">Enable downtime for ${dayLabel}</span>
+      </label>
+    </div>
+    <div class="downtime-card__body">
+      <div class="downtime-windows" data-day-windows></div>
+      <button type="button" class="btn btn-ghost btn-small" data-add-window>
+        <i data-lucide="plus" aria-hidden="true"></i>
+        <span>Add window</span>
+      </button>
+    </div>
+  `;
+  return card;
+}
+
+function initializeDowntimeCard(card) {
+  const windowsContainer = card.querySelector('[data-day-windows]');
+  const toggle = card.querySelector('[data-day-toggle]');
+  const summary = card.querySelector('[data-window-summary]');
+  const addButton = card.querySelector('[data-add-window]');
+
+  if (!windowsContainer || !(toggle instanceof HTMLInputElement) || !addButton) {
+    return;
+  }
+
+  const addWindowRow = (startValue = '09:00', endValue = '17:00') => {
+    const row = document.createElement('div');
+    row.className = 'downtime-window';
+    row.dataset.windowRow = '';
+
+    const startField = document.createElement('label');
+    startField.className = 'time-field';
+    startField.textContent = 'Start';
+    const startSelectWrapper = document.createElement('div');
+    startSelectWrapper.className = 'select-wrapper';
+    const startSelect = createTimeSelect(startValue);
+    startSelect.dataset.windowStart = '';
+    startSelectWrapper.appendChild(startSelect);
+    startField.appendChild(startSelectWrapper);
+
+    const endField = document.createElement('label');
+    endField.className = 'time-field';
+    endField.textContent = 'End';
+    const endSelectWrapper = document.createElement('div');
+    endSelectWrapper.className = 'select-wrapper';
+    const endSelect = createTimeSelect(endValue);
+    endSelect.dataset.windowEnd = '';
+    endSelectWrapper.appendChild(endSelect);
+    endField.appendChild(endSelectWrapper);
+
+    const actions = document.createElement('div');
+    actions.className = 'window-actions';
+    const duplicateButton = document.createElement('button');
+    duplicateButton.type = 'button';
+    duplicateButton.className = 'icon-button';
+    duplicateButton.dataset.duplicateWindow = '';
+    duplicateButton.setAttribute('aria-label', 'Duplicate downtime window');
+    duplicateButton.innerHTML = '<i data-lucide="copy" aria-hidden="true"></i>';
+
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'icon-button';
+    deleteButton.dataset.deleteWindow = '';
+    deleteButton.setAttribute('aria-label', 'Remove downtime window');
+    deleteButton.innerHTML = '<i data-lucide="trash-2" aria-hidden="true"></i>';
+
+    actions.append(duplicateButton, deleteButton);
+    row.append(startField, endField, actions);
+    windowsContainer.appendChild(row);
+
+    const handleChange = () => {
+      updateDowntimeSummary(summary, windowsContainer, toggle.checked);
+    };
+
+    startSelect.addEventListener('change', handleChange);
+    endSelect.addEventListener('change', handleChange);
+
+    duplicateButton.addEventListener('click', () => {
+      addWindowRow(startSelect.value, endSelect.value);
+      updateDowntimeSummary(summary, windowsContainer, toggle.checked);
+      refreshLucideIcons();
+    });
+
+    deleteButton.addEventListener('click', () => {
+      const totalRows = windowsContainer.querySelectorAll('[data-window-row]').length;
+      if (totalRows <= 1) {
+        startSelect.value = '09:00';
+        endSelect.value = '17:00';
+      } else {
+        row.remove();
+      }
+      updateDowntimeSummary(summary, windowsContainer, toggle.checked);
+    });
+
+    refreshLucideIcons();
+    return row;
+  };
+
+  addWindowRow();
+
+  const setEnabledState = (enabled) => {
+    card.classList.toggle('is-disabled', !enabled);
+    const controls = card.querySelectorAll('select, button');
+    controls.forEach((element) => {
+      if (element.matches('[data-day-toggle]')) {
+        return;
+      }
+      element.disabled = !enabled;
+    });
+    updateDowntimeSummary(summary, windowsContainer, enabled);
+  };
+
+  toggle.addEventListener('change', () => {
+    setEnabledState(toggle.checked);
+  });
+
+  addButton.addEventListener('click', () => {
+    addWindowRow();
+    updateDowntimeSummary(summary, windowsContainer, toggle.checked);
+  });
+
+  setEnabledState(toggle.checked);
+}
+
+function updateDowntimeSummary(summaryElement, container, enabled) {
+  if (!summaryElement) {
+    return;
+  }
+
+  if (!enabled) {
+    summaryElement.textContent = 'Downtime disabled';
+    return;
+  }
+
+  const windows = Array.from(container.querySelectorAll('[data-window-row]'));
+  if (windows.length === 0) {
+    summaryElement.textContent = 'No downtime windows';
+    return;
+  }
+
+  const summary = windows.map((row) => {
+    const startSelect = row.querySelector('[data-window-start]');
+    const endSelect = row.querySelector('[data-window-end]');
+    const startValue = startSelect?.value || '09:00';
+    const endValue = endSelect?.value || '17:00';
+    return `${formatDisplayTime(startValue)} – ${formatDisplayTime(endValue)}`;
+  });
+  summaryElement.textContent = summary.join(', ');
+}
+
+function createTimeSelect(selectedValue = '09:00') {
+  const select = document.createElement('select');
+  select.className = 'time-select';
+  TIME_OPTIONS.forEach((option) => {
+    const opt = document.createElement('option');
+    opt.value = option.value;
+    opt.textContent = option.label;
+    select.appendChild(opt);
+  });
+  if (TIME_OPTIONS.some((option) => option.value === selectedValue)) {
+    select.value = selectedValue;
+  } else if (TIME_OPTIONS.length > 0) {
+    select.value = TIME_OPTIONS[0].value;
+  }
+  return select;
+}
+
 const PAGE_CONFIG = {
   'dashboard': {
     title: 'Dashboard overview',
@@ -34,10 +840,10 @@ const PAGE_CONFIG = {
     }
   },
   'campaigns': {
-    title: 'Campaigns',
+    title: 'Sponsored Products campaigns',
     content: {
-      type: 'message',
-      text: 'Welcome to the Campaigns page. Review and manage your campaigns here.'
+      type: 'custom',
+      renderer: () => createCampaignPage()
     }
   },
   'inventory': {
@@ -88,20 +894,12 @@ function initDashboardShell() {
 
   // Initialize lucide icons after module load
   if (window.lucide && typeof window.lucide.createIcons === 'function') {
-    window.lucide.createIcons();
+    refreshLucideIcons();
   } else {
     window.addEventListener('load', () => {
-      if (window.lucide && typeof window.lucide.createIcons === 'function') {
-        window.lucide.createIcons();
-      }
+      refreshLucideIcons();
     });
   }
-
-  const updateLucideIcons = () => {
-    if (window.lucide && typeof window.lucide.createIcons === 'function') {
-      window.lucide.createIcons();
-    }
-  };
 
   const renderPageContent = (pageKey) => {
     const config = PAGE_CONFIG[pageKey];
@@ -118,6 +916,15 @@ function initDashboardShell() {
       message.className = 'page-message';
       message.textContent = config.content.text ?? '';
       contentContainer.appendChild(message);
+      return;
+    }
+
+    if (config.content?.type === 'custom' && typeof config.content.renderer === 'function') {
+      const customNode = config.content.renderer();
+      if (customNode) {
+        contentContainer.appendChild(customNode);
+      }
+      refreshLucideIcons();
       return;
     }
 
@@ -188,7 +995,7 @@ function initDashboardShell() {
     const desktopIcon = toggle.querySelector('.icon-desktop');
     if (desktopIcon) {
       desktopIcon.setAttribute('data-lucide', isOpen ? 'panel-left-close' : 'panel-left-open');
-      updateLucideIcons();
+      refreshLucideIcons();
     }
 
     updateHeaderHeightVar();
@@ -271,7 +1078,7 @@ function initDashboardShell() {
 
   const defaultPage = navButtons.find((btn) => btn.classList.contains('is-active'))?.dataset.page || 'dashboard';
   renderPageContent(defaultPage);
-  updateLucideIcons();
+  refreshLucideIcons();
   updateHeaderHeightVar();
   window.addEventListener('load', () => {
     updateHeaderHeightVar();
