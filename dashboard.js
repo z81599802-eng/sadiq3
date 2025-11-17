@@ -123,6 +123,20 @@ const CAMPAIGN_PAGINATION = {
   totalPages: 13,
 };
 
+const PROFILE_DETAILS = {
+  name: 'fifty_fifty_offer_zone',
+  email: '-',
+  sellerId: 'fifty_fifty_offer_zone',
+  joinedOn: 'Oct 29, 2025',
+  lastLogin: 'Nov 12, 2025 20:16',
+};
+
+const ADS_AUTH_DETAILS = {
+  profileId: '420471957462008',
+  region: 'IN',
+  lastUpdated: 'Oct 29, 2025 17:44',
+};
+
 function refreshLucideIcons() {
   if (typeof window !== 'undefined' && window.lucide && typeof window.lucide.createIcons === 'function') {
     window.lucide.createIcons();
@@ -186,6 +200,133 @@ function createCampaignPage() {
 
   refreshLucideIcons();
   return container;
+}
+
+function createProfilePage() {
+  const container = document.createElement('div');
+  container.className = 'profile-page';
+
+  const accountSection = document.createElement('section');
+  accountSection.className = 'profile-card';
+  accountSection.innerHTML = `
+    <header class="profile-card__header">
+      <div>
+        <p class="eyebrow-text">Account details</p>
+        <h2>Personal details pulled from your Wissen Ecom login.</h2>
+        <p class="profile-subtext">Keep your seller identity and login details organized.</p>
+      </div>
+    </header>
+    <dl class="profile-details-grid">
+      ${buildDetailRow('Name', PROFILE_DETAILS.name)}
+      ${buildDetailRow('Email', PROFILE_DETAILS.email)}
+      ${buildDetailRow('Seller ID', PROFILE_DETAILS.sellerId)}
+      ${buildDetailRow('Joined on', PROFILE_DETAILS.joinedOn)}
+      ${buildDetailRow('Last login', PROFILE_DETAILS.lastLogin)}
+    </dl>
+  `;
+
+  const subscriptionSection = document.createElement('section');
+  subscriptionSection.className = 'profile-card profile-card--highlight';
+  subscriptionSection.innerHTML = `
+    <header class="profile-card__header">
+      <div>
+        <p class="eyebrow-text">Subscription plan</p>
+        <h2>Your Wissen Ecom subscription details.</h2>
+        <p class="profile-subtext">Track billing status, renewals, and plan benefits.</p>
+      </div>
+      <span class="status-pill status-pill--active" aria-label="Subscription active">Monthly · Active</span>
+    </header>
+    <div class="profile-details-grid profile-details-grid--two-cols">
+      ${buildDetailRow('Price', 'Rs.999 per month')}
+      ${buildDetailRow('Next renewal', 'Dec 17, 2025')}
+      ${buildDetailRow('Notes', 'Includes full Amazon insights and highlight alerts.')}
+    </div>
+    <div class="profile-actions">
+      <a class="text-link" href="index.html#contact" aria-label="Manage plan via billing support form">Manage plan</a>
+      <a class="text-link" href="index.html#contact">Contact billing via support form</a>
+    </div>
+  `;
+
+  const authorizationGrid = document.createElement('div');
+  authorizationGrid.className = 'profile-grid';
+  authorizationGrid.appendChild(buildAuthorizationCard({
+    title: 'Amazon Seller Central authorization',
+    description: 'Click on Authorize to grant Wissen Ecom secure access to your Seller Central account.',
+    buttonLabel: 'Authorize',
+  }));
+
+  authorizationGrid.appendChild(buildAdsAuthorizationCard());
+
+  const supportSection = document.createElement('section');
+  supportSection.className = 'profile-card profile-card--support';
+  supportSection.innerHTML = `
+    <header class="profile-card__header">
+      <div>
+        <p class="eyebrow-text">Need support?</p>
+        <h2>Reach our team directly through the support form for faster assistance.</h2>
+        <p class="profile-subtext">We typically respond within one business day.</p>
+      </div>
+    </header>
+    <div class="profile-actions">
+      <a class="btn btn-primary" href="index.html#contact">Open support form</a>
+    </div>
+  `;
+
+  container.appendChild(accountSection);
+  container.appendChild(subscriptionSection);
+  container.appendChild(authorizationGrid);
+  container.appendChild(supportSection);
+
+  refreshLucideIcons();
+  return container;
+}
+
+function buildDetailRow(label, value) {
+  return `
+    <div class="detail-row">
+      <dt>${label}</dt>
+      <dd>${value}</dd>
+    </div>
+  `;
+}
+
+function buildAuthorizationCard({ title, description, buttonLabel }) {
+  const section = document.createElement('section');
+  section.className = 'profile-card profile-card--compact';
+  section.innerHTML = `
+    <header class="profile-card__header">
+      <div>
+        <p class="eyebrow-text">${title}</p>
+        <p class="profile-subtext">${description}</p>
+      </div>
+    </header>
+    <div class="profile-actions">
+      <button type="button" class="btn btn-secondary">${buttonLabel}</button>
+    </div>
+  `;
+  return section;
+}
+
+function buildAdsAuthorizationCard() {
+  const section = document.createElement('section');
+  section.className = 'profile-card profile-card--compact';
+  section.innerHTML = `
+    <header class="profile-card__header">
+      <div>
+        <p class="eyebrow-text">Amazon Ads authorization</p>
+        <p class="profile-subtext">Authorize Wissen Ecom to read your Amazon Ads data. We will only use the permissions to sync Ads performance.</p>
+      </div>
+    </header>
+    <dl class="profile-details-grid profile-details-grid--stacked">
+      ${buildDetailRow('Profile ID', ADS_AUTH_DETAILS.profileId)}
+      ${buildDetailRow('Region', ADS_AUTH_DETAILS.region)}
+      ${buildDetailRow('Last updated', ADS_AUTH_DETAILS.lastUpdated)}
+    </dl>
+    <div class="profile-actions">
+      <button type="button" class="btn btn-secondary">Reconnect</button>
+    </div>
+  `;
+  return section;
 }
 
 
@@ -865,8 +1006,8 @@ const PAGE_CONFIG = {
   'profile': {
     title: 'Profile',
     content: {
-      type: 'message',
-      text: 'Welcome to the Profile page. Update your personal details and preferences here.'
+      type: 'custom',
+      renderer: () => createProfilePage()
     }
   }
 };
