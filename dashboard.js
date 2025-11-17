@@ -188,157 +188,7 @@ function createCampaignPage() {
   return container;
 }
 
-function createProfilePage() {
-  const container = document.createElement('div');
-  container.className = 'profile-page';
 
-  container.innerHTML = `
-    <section class="profile-hero">
-      <div class="profile-hero__text">
-        <p class="eyebrow-text">Account profile</p>
-        <h2>Keep your Wissen Ecom identity synced and actionable.</h2>
-        <p>Review your login details, subscription status, and connected services from a single, vibrant workspace.</p>
-        <div class="chip-row" role="list">
-          <span class="status-chip status-chip--primary" role="listitem">Premium data guardrails</span>
-          <span class="status-chip status-chip--success" role="listitem">Real-time sync</span>
-          <span class="status-chip status-chip--soft" role="listitem">Mobile-ready view</span>
-        </div>
-      </div>
-      <div class="profile-hero__stats" aria-label="Profile health summary">
-        <div class="stat-pill">
-          <span class="stat-label">Seller ID</span>
-          <span class="stat-value">fifty_fifty_offer_zone</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-label">Status</span>
-          <span class="stat-value stat-value--success">Active</span>
-        </div>
-        <div class="stat-pill">
-          <span class="stat-label">Next renewal</span>
-          <span class="stat-value">Dec 17, 2025</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="profile-grid">
-      <article class="info-card" aria-label="Account details">
-        <div class="card-header">
-          <div>
-            <p class="eyebrow-text">Account details</p>
-            <h3>Personal details pulled from your Wissen Ecom login.</h3>
-          </div>
-          <span class="status-chip status-chip--soft">Securely stored</span>
-        </div>
-        <dl class="data-grid">
-          <div class="data-item">
-            <dt>Name</dt>
-            <dd>fifty_fifty_offer_zone</dd>
-          </div>
-          <div class="data-item">
-            <dt>Email</dt>
-            <dd>-</dd>
-          </div>
-          <div class="data-item">
-            <dt>Seller ID</dt>
-            <dd>fifty_fifty_offer_zone</dd>
-          </div>
-          <div class="data-item">
-            <dt>Joined on</dt>
-            <dd>Oct 29, 2025</dd>
-          </div>
-          <div class="data-item">
-            <dt>Last login</dt>
-            <dd>Nov 12, 2025 20:16</dd>
-          </div>
-        </dl>
-      </article>
-
-      <article class="info-card subscription-card" aria-label="Subscription plan">
-        <div class="card-header">
-          <div>
-            <p class="eyebrow-text">Subscription plan</p>
-            <h3>Your Wissen Ecom subscription details.</h3>
-          </div>
-          <span class="plan-pill" aria-label="Plan cycle">Monthly · Active</span>
-        </div>
-        <dl class="data-grid">
-          <div class="data-item">
-            <dt>Price</dt>
-            <dd>Rs.999 per month</dd>
-          </div>
-          <div class="data-item">
-            <dt>Next renewal</dt>
-            <dd>Dec 17, 2025</dd>
-          </div>
-          <div class="data-item data-item--full">
-            <dt>Notes</dt>
-            <dd>Includes full Amazon insights and highlight alerts.</dd>
-          </div>
-        </dl>
-        <div class="subscription-actions">
-          <button type="button" class="btn btn-primary">Manage plan</button>
-          <a class="text-link" href="index.html#contact">Contact billing via support form</a>
-        </div>
-      </article>
-    </section>
-
-    <section class="profile-grid profile-grid--split">
-      <article class="info-card info-card--accent" aria-label="Amazon Seller Central authorization">
-        <div class="card-header">
-          <div>
-            <p class="eyebrow-text">Amazon Seller Central authorization</p>
-            <h3>Click on Authorize to grant Wissen Ecom secure access to your Seller Central account.</h3>
-          </div>
-        </div>
-        <div class="card-actions">
-          <button type="button" class="btn btn-secondary">Authorize</button>
-        </div>
-      </article>
-
-      <article class="info-card" aria-label="Amazon Ads authorization">
-        <div class="card-header">
-          <div>
-            <p class="eyebrow-text">Amazon Ads authorization</p>
-            <h3>Authorize Wissen Ecom to read your Amazon Ads data. We will only use the permissions to sync Ads performance.</h3>
-          </div>
-          <span class="status-chip status-chip--success">Connected</span>
-        </div>
-        <dl class="data-grid">
-          <div class="data-item">
-            <dt>Profile ID</dt>
-            <dd>420471957462008</dd>
-          </div>
-          <div class="data-item">
-            <dt>Region</dt>
-            <dd>IN</dd>
-          </div>
-          <div class="data-item">
-            <dt>Last updated</dt>
-            <dd>Oct 29, 2025 17:44</dd>
-          </div>
-        </dl>
-        <div class="card-actions">
-          <button type="button" class="btn btn-primary">Reconnect</button>
-        </div>
-      </article>
-    </section>
-
-    <section class="info-card support-card" aria-label="Need support">
-      <div class="card-header">
-        <div>
-          <p class="eyebrow-text">Need support?</p>
-          <h3>Reach our team directly through the support form for faster assistance.</h3>
-          <p class="support-subtext">Our specialists can help with billing, authorization, or campaign troubleshooting.</p>
-        </div>
-      </div>
-      <div class="card-actions">
-        <button type="button" class="btn btn-primary">Open support form</button>
-      </div>
-    </section>
-  `;
-
-  return container;
-}
 
 function buildCampaignHero() {
   const section = document.createElement('section');
@@ -513,7 +363,7 @@ function buildCampaignUpdateSection() {
         <small>Optional: increase bids for rest of search placement (0-900).</small>
       </label>
       <label class="checkbox-field">
-        <input type="checkbox" name="returnRepresentation" checked />
+        <input type="checkbox" data-day-toggle />
         <span>
           Return updated campaign details
           <small>Request the full campaign representation in the API response.</small>
@@ -796,7 +646,7 @@ function buildDowntimeCard(dayLabel) {
         <p class="downtime-summary" data-window-summary>9:00 AM – 5:00 PM</p>
       </div>
       <label class="toggle-switch">
-        <input type="checkbox" data-day-toggle />
+        <input type="checkbox" data-day-toggle checked />
         <span class="toggle-slider" aria-hidden="true"></span>
         <span class="sr-only">Enable downtime for ${dayLabel}</span>
       </label>
@@ -998,7 +848,7 @@ const PAGE_CONFIG = {
     }
   },
   'campaigns': {
-    title: 'Sponsored Products campaigns',
+    title: 'Campaigns',
     content: {
       type: 'custom',
       renderer: () => createCampaignPage()
@@ -1015,8 +865,8 @@ const PAGE_CONFIG = {
   'profile': {
     title: 'Profile',
     content: {
-      type: 'custom',
-      renderer: () => createProfilePage()
+      type: 'message',
+      text: 'Welcome to the Profile page. Update your personal details and preferences here.'
     }
   }
 };
@@ -1034,6 +884,7 @@ function initDashboardShell() {
   const toggle = document.querySelector('.sidebar-toggle');
   const overlay = document.querySelector('[data-sidebar-overlay]');
   const mainArea = document.querySelector('.main-area');
+
   const mainHeader = document.querySelector('.main-header');
   const rootElement = document.documentElement;
 
@@ -1224,7 +1075,6 @@ function initDashboardShell() {
 
   window.addEventListener('resize', () => {
     if (!isMobileView()) {
-      document.body.classList.remove('sidebar-open');
       setSidebarState('open');
       return;
     }
