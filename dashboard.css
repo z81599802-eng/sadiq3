@@ -878,6 +878,8 @@ body {
   flex-direction: column;
   gap: 1.5rem;
   padding: 2rem;
+  width: 100%;
+  background: var(--color-surface);
 }
 
 .profile-card {
