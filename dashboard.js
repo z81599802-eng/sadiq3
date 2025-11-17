@@ -268,10 +268,6 @@ function buildCampaignTableSection() {
   const section = document.createElement('section');
   section.className = 'campaign-table-section';
   section.innerHTML = `
-    <div class="section-heading">
-      <h3>Status overview</h3>
-      <p>Track individual Sponsored Products campaigns, budgets, and live states.</p>
-    </div>
     <div class="table-wrapper">
       <table class="campaign-table">
         <caption class="sr-only">Sponsored Products campaign activity</caption>
@@ -648,7 +644,7 @@ function buildDowntimeCard(dayLabel) {
         <p class="downtime-summary" data-window-summary>9:00 AM – 5:00 PM</p>
       </div>
       <label class="toggle-switch">
-        <input type="checkbox" data-day-toggle checked />
+        <input type="checkbox" data-day-toggle />
         <span class="toggle-slider" aria-hidden="true"></span>
         <span class="sr-only">Enable downtime for ${dayLabel}</span>
       </label>
