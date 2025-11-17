@@ -488,11 +488,21 @@ function renderCampaignRows(tableBody, rows) {
     updatedCell.textContent = campaign.updatedAt;
 
     const actionCell = document.createElement('td');
-    const actionButton = document.createElement('button');
-    actionButton.type = 'button';
-    actionButton.className = 'btn btn-ghost btn-small';
-    actionButton.textContent = campaign.action;
-    actionCell.appendChild(actionButton);
+    const actions = document.createElement('div');
+    actions.className = 'table-actions';
+
+    const updateButton = document.createElement('button');
+    updateButton.type = 'button';
+    updateButton.className = 'btn btn-primary btn-small';
+    updateButton.textContent = 'Update';
+
+    const pauseButton = document.createElement('button');
+    pauseButton.type = 'button';
+    pauseButton.className = 'btn btn-outline btn-small';
+    pauseButton.textContent = 'Pause';
+
+    actions.append(updateButton, pauseButton);
+    actionCell.appendChild(actions);
 
     row.append(campaignCell, statusCell, budgetCell, usedCell, updatedCell, actionCell);
     fragment.appendChild(row);
