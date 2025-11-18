@@ -327,7 +327,6 @@ function buildSubscriptionPanel() {
     </div>
     <div class="profile-actions">
       <a class="btn btn-primary" href="index.html#contact">Upgrade or downgrade</a>
-      <a class="text-link" href="index.html#contact">View billing history</a>
     </div>
   `;
   return section;
@@ -353,7 +352,6 @@ function buildSellerPanel() {
     </dl>
     <div class="profile-actions">
       <button type="button" class="btn btn-secondary">Refresh connection</button>
-      <a class="text-link" href="#">View permissions</a>
     </div>
   `;
   return section;
@@ -378,7 +376,6 @@ function buildAdsPanel() {
     </dl>
     <div class="profile-actions">
       <button type="button" class="btn btn-secondary">Reconnect Ads</button>
-      <a class="text-link" href="#">Manage tokens securely</a>
     </div>
   `;
   return section;
@@ -397,7 +394,6 @@ function buildSupportPanel() {
     </header>
     <div class="profile-actions">
       <a class="btn btn-primary" href="index.html#contact">Open support form</a>
-      <a class="text-link" href="mailto:support@wissenecom.com">Email support</a>
     </div>
   `;
   return section;
