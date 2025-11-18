@@ -1005,18 +1005,19 @@ body {
   z-index: 1;
 }
 
-.profile-hero__meta .detail-row {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
+.profile-fact {
+  background: #ffffff;
+  border: 1px solid rgba(31, 58, 147, 0.12);
+  color: var(--color-text);
+  box-shadow: 0 14px 32px rgba(12, 26, 76, 0.18);
 }
 
-.profile-hero__meta dt {
-  color: rgba(255, 255, 255, 0.8);
+.profile-fact dt {
+  color: var(--color-text-muted);
 }
 
-.profile-hero__meta dd {
-  color: #fff;
+.profile-fact dd {
+  color: var(--color-text);
 }
 
 .profile-tablist {
@@ -1073,7 +1074,7 @@ body {
 }
 
 .profile-card {
-  background: linear-gradient(180deg, #ffffff 0%, #eef3ff 100%);
+  background: #ffffff;
   color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: 20px;
@@ -1121,10 +1122,11 @@ body {
 }
 
 .detail-row {
-  background: rgba(31, 58, 147, 0.04);
+  background: #ffffff;
   border-radius: 14px;
   padding: 0.85rem 1rem;
   border: 1px solid rgba(31, 58, 147, 0.08);
+  box-shadow: 0 8px 20px rgba(16, 38, 120, 0.08);
 }
 
 .detail-row dt {
@@ -1173,7 +1175,7 @@ body {
 }
 
 .profile-card--highlight {
-  background: linear-gradient(135deg, rgba(31, 58, 147, 0.12) 0%, #ffffff 60%, #eef3ff 100%);
+  background: linear-gradient(135deg, rgba(31, 58, 147, 0.08) 0%, #ffffff 65%, #f7f9ff 100%);
 }
 
 .profile-grid {
