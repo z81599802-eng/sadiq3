@@ -892,6 +892,33 @@ body {
   box-shadow: 0 20px 60px rgba(6, 16, 54, 0.4);
 }
 
+.profile-hero-card .eyebrow-text,
+.profile-hero-card h2,
+.profile-hero-card p {
+  color: #f5f7ff;
+}
+
+.profile-hero-card .profile-subtext {
+  color: rgba(245, 247, 255, 0.85);
+}
+
+.profile-hero-card .btn-ghost,
+.profile-hero-card .btn-ghost i,
+.profile-hero-card .btn-secondary,
+.profile-hero-card .btn-secondary i {
+  color: #f5f7ff;
+}
+
+.profile-hero-card .btn-ghost {
+  border-color: rgba(245, 247, 255, 0.35);
+}
+
+.profile-hero-card .btn-secondary {
+  background: rgba(245, 247, 255, 0.12);
+  border: 1px solid rgba(245, 247, 255, 0.4);
+  box-shadow: 0 12px 28px rgba(6, 16, 54, 0.35);
+}
+
 .profile-banner {
   position: absolute;
   inset: 0;
