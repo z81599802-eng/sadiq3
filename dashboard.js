@@ -137,6 +137,13 @@ const ADS_AUTH_DETAILS = {
   lastUpdated: 'Oct 29, 2025 17:44',
 };
 
+const PROFILE_TABS = [
+  { key: 'subscription', label: 'Subscription', icon: 'badge-check' },
+  { key: 'seller', label: 'Amazon Seller Central', icon: 'store' },
+  { key: 'ads', label: 'Amazon Ads', icon: 'megaphone' },
+  { key: 'support', label: 'Support', icon: 'lifebuoy' },
+];
+
 function refreshLucideIcons() {
   if (typeof window !== 'undefined' && window.lucide && typeof window.lucide.createIcons === 'function') {
     window.lucide.createIcons();
@@ -206,79 +213,247 @@ function createProfilePage() {
   const container = document.createElement('div');
   container.className = 'profile-page';
 
-  const accountSection = document.createElement('section');
-  accountSection.className = 'profile-card';
-  accountSection.innerHTML = `
-    <header class="profile-card__header">
-      <div>
-        <p class="eyebrow-text">Account details</p>
-        <h2>Personal details pulled from your Wissen Ecom login.</h2>
-        <p class="profile-subtext">Keep your seller identity and login details organized.</p>
+  const heroCard = buildProfileHeroCard();
+  const tabNavigation = buildProfileTabs();
+  const panels = buildProfilePanels();
+
+  container.appendChild(heroCard);
+  container.appendChild(tabNavigation);
+  container.appendChild(panels.wrapper);
+
+  initProfileTabs(tabNavigation, panels);
+  refreshLucideIcons();
+  return container;
+}
+
+function buildProfileHeroCard() {
+  const card = document.createElement('section');
+  card.className = 'profile-hero-card';
+
+  const avatarInitial = PROFILE_DETAILS.name ? PROFILE_DETAILS.name[0].toUpperCase() : 'U';
+
+  card.innerHTML = `
+    <div class="profile-banner" aria-hidden="true"></div>
+    <div class="profile-hero__content">
+      <div class="profile-identity">
+        <div class="profile-avatar" aria-hidden="true">${avatarInitial}</div>
+        <div>
+          <p class="eyebrow-text">Demo profile</p>
+          <h2>${PROFILE_DETAILS.name}</h2>
+          <p class="profile-subtext">${PROFILE_DETAILS.email !== '-' ? PROFILE_DETAILS.email : 'No email on file'}</p>
+        </div>
       </div>
-    </header>
-    <dl class="profile-details-grid">
-      ${buildDetailRow('Name', PROFILE_DETAILS.name)}
-      ${buildDetailRow('Email', PROFILE_DETAILS.email)}
+      <div class="profile-quick-actions">
+        <a class="btn btn-secondary" href="#contact" aria-label="Contact support for profile updates">Update details</a>
+        <button type="button" class="btn btn-ghost" aria-label="Download profile report">
+          <i data-lucide="download" aria-hidden="true"></i>
+          <span>Download profile</span>
+        </button>
+      </div>
+    </div>
+    <dl class="profile-hero__meta" aria-label="Account quick facts">
       ${buildDetailRow('Seller ID', PROFILE_DETAILS.sellerId)}
       ${buildDetailRow('Joined on', PROFILE_DETAILS.joinedOn)}
       ${buildDetailRow('Last login', PROFILE_DETAILS.lastLogin)}
+      ${buildDetailRow('Status', '<span class="status-pill status-pill--active">Verified</span>')}
     </dl>
   `;
 
-  const subscriptionSection = document.createElement('section');
-  subscriptionSection.className = 'profile-card profile-card--highlight';
-  subscriptionSection.innerHTML = `
+  return card;
+}
+
+function buildProfileTabs() {
+  const tablist = document.createElement('div');
+  tablist.className = 'profile-tablist';
+  tablist.setAttribute('role', 'tablist');
+  tablist.setAttribute('aria-label', 'Profile sections');
+
+  PROFILE_TABS.forEach((tab, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `profile-tab ${index === 0 ? 'is-active' : ''}`;
+    button.dataset.target = tab.key;
+    button.role = 'tab';
+    button.ariaSelected = index === 0 ? 'true' : 'false';
+    button.tabIndex = index === 0 ? '0' : '-1';
+    button.innerHTML = `
+      <i data-lucide="${tab.icon}" aria-hidden="true"></i>
+      <span>${tab.label}</span>
+    `;
+    tablist.appendChild(button);
+  });
+
+  return tablist;
+}
+
+function buildProfilePanels() {
+  const panels = document.createElement('div');
+  panels.className = 'profile-panels';
+
+  const panelMap = {
+    subscription: buildSubscriptionPanel(),
+    seller: buildSellerPanel(),
+    ads: buildAdsPanel(),
+    support: buildSupportPanel(),
+  };
+
+  Object.entries(panelMap).forEach(([key, panel], index) => {
+    panel.dataset.panel = key;
+    panel.role = 'tabpanel';
+    panel.hidden = index !== 0;
+    panels.appendChild(panel);
+  });
+
+  return { wrapper: panels, panelMap };
+}
+
+function buildSubscriptionPanel() {
+  const section = document.createElement('section');
+  section.className = 'profile-card profile-card--highlight';
+  section.innerHTML = `
     <header class="profile-card__header">
       <div>
         <p class="eyebrow-text">Subscription plan</p>
-        <h2>Your Wissen Ecom subscription details.</h2>
-        <p class="profile-subtext">Track billing status, renewals, and plan benefits.</p>
+        <h2>Wissen Ecom Monthly · Active</h2>
+        <p class="profile-subtext">Billing, renewals, and entitlements for your workspace.</p>
       </div>
-      <span class="status-pill status-pill--active" aria-label="Subscription active">Monthly · Active</span>
+      <span class="status-pill status-pill--active" aria-label="Subscription active">Active</span>
     </header>
     <div class="profile-details-grid profile-details-grid--two-cols">
       ${buildDetailRow('Price', 'Rs.999 per month')}
       ${buildDetailRow('Next renewal', 'Dec 17, 2025')}
-      ${buildDetailRow('Notes', 'Includes full Amazon insights and highlight alerts.')}
+      ${buildDetailRow('Plan perks', 'Full Amazon insights, alerts, and exports')}
+      ${buildDetailRow('Payment method', '•••• 7823 · Auto-renew enabled')}
     </div>
     <div class="profile-actions">
-      <a class="text-link" href="index.html#contact" aria-label="Manage plan via billing support form">Manage plan</a>
-      <a class="text-link" href="index.html#contact">Contact billing via support form</a>
+      <a class="btn btn-primary" href="index.html#contact">Upgrade or downgrade</a>
+      <a class="text-link" href="index.html#contact">View billing history</a>
     </div>
   `;
+  return section;
+}
 
-  const authorizationGrid = document.createElement('div');
-  authorizationGrid.className = 'profile-grid';
-  authorizationGrid.appendChild(buildAuthorizationCard({
-    title: 'Amazon Seller Central authorization',
-    description: 'Click on Authorize to grant Wissen Ecom secure access to your Seller Central account.',
-    buttonLabel: 'Authorize',
-  }));
-
-  authorizationGrid.appendChild(buildAdsAuthorizationCard());
-
-  const supportSection = document.createElement('section');
-  supportSection.className = 'profile-card profile-card--support';
-  supportSection.innerHTML = `
+function buildSellerPanel() {
+  const section = document.createElement('section');
+  section.className = 'profile-card';
+  section.innerHTML = `
     <header class="profile-card__header">
       <div>
-        <p class="eyebrow-text">Need support?</p>
-        <h2>Reach our team directly through the support form for faster assistance.</h2>
-        <p class="profile-subtext">We typically respond within one business day.</p>
+        <p class="eyebrow-text">Amazon Seller Central</p>
+        <h2>Keep your seller connection healthy.</h2>
+        <p class="profile-subtext">Authorize, monitor syncs, and view identifiers tied to your workspace.</p>
+      </div>
+      <span class="status-pill status-pill--active">Connected</span>
+    </header>
+    <dl class="profile-details-grid profile-details-grid--two-cols">
+      ${buildDetailRow('Seller ID', PROFILE_DETAILS.sellerId)}
+      ${buildDetailRow('Region', 'India (IN)')}
+      ${buildDetailRow('Last sync', 'Nov 12, 2025 · 20:16')}
+      ${buildDetailRow('Sync health', '<span class="health-pill health-pill--good">No issues</span>')}
+    </dl>
+    <div class="profile-actions">
+      <button type="button" class="btn btn-secondary">Refresh connection</button>
+      <a class="text-link" href="#">View permissions</a>
+    </div>
+  `;
+  return section;
+}
+
+function buildAdsPanel() {
+  const section = document.createElement('section');
+  section.className = 'profile-card';
+  section.innerHTML = `
+    <header class="profile-card__header">
+      <div>
+        <p class="eyebrow-text">Amazon Ads authorization</p>
+        <h2>Control ad data access from one place.</h2>
+        <p class="profile-subtext">We only request read access to sync Ads performance. Reconnect anytime.</p>
+      </div>
+    </header>
+    <dl class="profile-details-grid profile-details-grid--two-cols">
+      ${buildDetailRow('Profile ID', ADS_AUTH_DETAILS.profileId)}
+      ${buildDetailRow('Region', ADS_AUTH_DETAILS.region)}
+      ${buildDetailRow('Last updated', ADS_AUTH_DETAILS.lastUpdated)}
+      ${buildDetailRow('Permissions', 'Read-only metrics & spend insights')}
+    </dl>
+    <div class="profile-actions">
+      <button type="button" class="btn btn-secondary">Reconnect Ads</button>
+      <a class="text-link" href="#">Manage tokens securely</a>
+    </div>
+  `;
+  return section;
+}
+
+function buildSupportPanel() {
+  const section = document.createElement('section');
+  section.className = 'profile-card profile-card--support';
+  section.innerHTML = `
+    <header class="profile-card__header">
+      <div>
+        <p class="eyebrow-text">Support & guidance</p>
+        <h2>Need help with subscriptions or authorizations?</h2>
+        <p class="profile-subtext">Reach our team directly. We respond within one business day.</p>
       </div>
     </header>
     <div class="profile-actions">
       <a class="btn btn-primary" href="index.html#contact">Open support form</a>
+      <a class="text-link" href="mailto:support@wissenecom.com">Email support</a>
     </div>
   `;
+  return section;
+}
 
-  container.appendChild(accountSection);
-  container.appendChild(subscriptionSection);
-  container.appendChild(authorizationGrid);
-  container.appendChild(supportSection);
+function initProfileTabs(tabNavigation, panels) {
+  const tabButtons = Array.from(tabNavigation.querySelectorAll('.profile-tab'));
+  const { panelMap } = panels;
 
-  refreshLucideIcons();
-  return container;
+  const setActiveTab = (targetKey) => {
+    tabButtons.forEach((button) => {
+      const isActive = button.dataset.target === targetKey;
+      button.classList.toggle('is-active', isActive);
+      button.ariaSelected = isActive ? 'true' : 'false';
+      button.tabIndex = isActive ? '0' : '-1';
+    });
+
+    Object.entries(panelMap).forEach(([key, panel]) => {
+      panel.hidden = key !== targetKey;
+    });
+
+    refreshLucideIcons();
+  };
+
+  const focusTabByIndex = (targetIndex) => {
+    const button = tabButtons[targetIndex];
+    if (button) {
+      setActiveTab(button.dataset.target);
+      button.focus();
+    }
+  };
+
+  tabButtons.forEach((button, index) => {
+    button.addEventListener('click', () => setActiveTab(button.dataset.target));
+    button.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        setActiveTab(button.dataset.target);
+        return;
+      }
+
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        focusTabByIndex((index + 1) % tabButtons.length);
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        focusTabByIndex((index - 1 + tabButtons.length) % tabButtons.length);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        focusTabByIndex(0);
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        focusTabByIndex(tabButtons.length - 1);
+      }
+    });
+  });
 }
 
 function buildDetailRow(label, value) {
@@ -288,45 +463,6 @@ function buildDetailRow(label, value) {
       <dd>${value}</dd>
     </div>
   `;
-}
-
-function buildAuthorizationCard({ title, description, buttonLabel }) {
-  const section = document.createElement('section');
-  section.className = 'profile-card profile-card--compact';
-  section.innerHTML = `
-    <header class="profile-card__header">
-      <div>
-        <p class="eyebrow-text">${title}</p>
-        <p class="profile-subtext">${description}</p>
-      </div>
-    </header>
-    <div class="profile-actions">
-      <button type="button" class="btn btn-secondary">${buttonLabel}</button>
-    </div>
-  `;
-  return section;
-}
-
-function buildAdsAuthorizationCard() {
-  const section = document.createElement('section');
-  section.className = 'profile-card profile-card--compact';
-  section.innerHTML = `
-    <header class="profile-card__header">
-      <div>
-        <p class="eyebrow-text">Amazon Ads authorization</p>
-        <p class="profile-subtext">Authorize Wissen Ecom to read your Amazon Ads data. We will only use the permissions to sync Ads performance.</p>
-      </div>
-    </header>
-    <dl class="profile-details-grid profile-details-grid--stacked">
-      ${buildDetailRow('Profile ID', ADS_AUTH_DETAILS.profileId)}
-      ${buildDetailRow('Region', ADS_AUTH_DETAILS.region)}
-      ${buildDetailRow('Last updated', ADS_AUTH_DETAILS.lastUpdated)}
-    </dl>
-    <div class="profile-actions">
-      <button type="button" class="btn btn-secondary">Reconnect</button>
-    </div>
-  `;
-  return section;
 }
 
 
