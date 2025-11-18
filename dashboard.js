@@ -422,12 +422,35 @@ function initProfileTabs(tabNavigation, panels) {
     refreshLucideIcons();
   };
 
-  tabButtons.forEach((button) => {
+  const focusTabByIndex = (targetIndex) => {
+    const button = tabButtons[targetIndex];
+    if (button) {
+      setActiveTab(button.dataset.target);
+      button.focus();
+    }
+  };
+
+  tabButtons.forEach((button, index) => {
     button.addEventListener('click', () => setActiveTab(button.dataset.target));
     button.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         setActiveTab(button.dataset.target);
+        return;
+      }
+
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        focusTabByIndex((index + 1) % tabButtons.length);
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        focusTabByIndex((index - 1 + tabButtons.length) % tabButtons.length);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        focusTabByIndex(0);
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        focusTabByIndex(tabButtons.length - 1);
       }
     });
   });
