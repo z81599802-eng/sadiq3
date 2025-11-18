@@ -141,7 +141,7 @@ const PROFILE_TABS = [
   { key: 'subscription', label: 'Subscription', icon: 'badge-check' },
   { key: 'seller', label: 'Amazon Seller Central', icon: 'store' },
   { key: 'ads', label: 'Amazon Ads', icon: 'megaphone' },
-  { key: 'support', label: 'Support', icon: 'lifebuoy' },
+  { key: 'support', label: 'Support', icon: 'messages-square' },
 ];
 
 function refreshLucideIcons() {
@@ -252,10 +252,10 @@ function buildProfileHeroCard() {
       </div>
     </div>
     <dl class="profile-hero__meta" aria-label="Account quick facts">
-      ${buildDetailRow('Seller ID', PROFILE_DETAILS.sellerId)}
-      ${buildDetailRow('Joined on', PROFILE_DETAILS.joinedOn)}
-      ${buildDetailRow('Last login', PROFILE_DETAILS.lastLogin)}
-      ${buildDetailRow('Status', '<span class="status-pill status-pill--active">Verified</span>')}
+      ${buildDetailRow('Seller ID', PROFILE_DETAILS.sellerId, 'profile-fact')}
+      ${buildDetailRow('Joined on', PROFILE_DETAILS.joinedOn, 'profile-fact')}
+      ${buildDetailRow('Last login', PROFILE_DETAILS.lastLogin, 'profile-fact')}
+      ${buildDetailRow('Status', '<span class="status-pill status-pill--active">Verified</span>', 'profile-fact')}
     </dl>
   `;
 
@@ -452,9 +452,10 @@ function initProfileTabs(tabNavigation, panels) {
   });
 }
 
-function buildDetailRow(label, value) {
+function buildDetailRow(label, value, extraClass = '') {
+  const className = ['detail-row', extraClass].filter(Boolean).join(' ');
   return `
-    <div class="detail-row">
+    <div class="${className}">
       <dt>${label}</dt>
       <dd>${value}</dd>
     </div>

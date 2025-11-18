@@ -1005,18 +1005,19 @@ body {
   z-index: 1;
 }
 
-.profile-hero__meta .detail-row {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
+.profile-fact {
+  background: #ffffff;
+  border: 1px solid rgba(31, 58, 147, 0.12);
+  color: var(--color-text);
+  box-shadow: 0 14px 32px rgba(12, 26, 76, 0.18);
 }
 
-.profile-hero__meta dt {
-  color: rgba(255, 255, 255, 0.8);
+.profile-fact dt {
+  color: var(--color-text-muted);
 }
 
-.profile-hero__meta dd {
-  color: #fff;
+.profile-fact dd {
+  color: var(--color-text);
 }
 
 .profile-tablist {
