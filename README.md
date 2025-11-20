@@ -2,5 +2,4 @@
 latest UI 
 
 Home Page Screenshot!
-<img width="1894" height="871" alt="image" src="https://github.com/user-attachments/assets/3ddb68b0-33a4-4bff-a2d9-75ce121f0b50" />
-
+[7a35e2f2-82f5-44ce-936e-dfc80d1a2ef0.pdf](https://github.com/user-attachments/files/23651741/7a35e2f2-82f5-44ce-936e-dfc80d1a2ef0.pdf)
