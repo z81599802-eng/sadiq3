@@ -28,7 +28,10 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   padding-top: var(--header-height);
+}
 
+body.nav-open {
+  overflow: hidden;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -85,6 +88,20 @@ button, .btn {
 .nav-links a:hover::after, .nav-links a:focus::after { width: 100%; }
 .nav-toggle { background: transparent; border: none; display: none; color: var(--color-primary); padding: .5rem; border-radius: .75rem; }
 .nav-toggle:hover, .nav-toggle:focus { background: rgba(31,58,147,.08); }
+.nav-toggle i { transition: transform 0.3s ease; }
+.nav-toggle[aria-expanded="true"] i { transform: rotate(90deg); }
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-base);
+  z-index: 900;
+}
+.nav-overlay.active { opacity: 1; visibility: visible; }
+.nav-mobile-login { display: none; width: 100%; }
 
 /* ============ section wrapper ============ */
 .hero { padding: 6rem 4vw; max-width: 1200px; margin: 0 auto; }
@@ -299,14 +316,17 @@ button, .btn {
 @media (max-width: 1024px) {
   .navbar { padding: 1rem 2.5vw; }
   .nav-links {
-    position: absolute; top: calc(100% + 0.75rem); right: 2.5vw;
-    background: #fff; box-shadow: var(--shadow-subtle); border-radius: 20px;
-    flex-direction: column; padding: 1rem 1.5rem; min-width: 220px;
-    opacity: 0; visibility: hidden; transform: translateY(-10px);
+    position: fixed; top: calc(var(--header-height) + 0.5rem); right: 4vw; left: 4vw;
+    background: #fff; box-shadow: var(--shadow-subtle); border-radius: 18px;
+    flex-direction: column; padding: 1.25rem 1.5rem; min-width: min(360px, 92vw);
+    opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.98); pointer-events: none;
+    z-index: 905;
+    border: 1px solid var(--color-border);
   }
-  .nav-links a { padding: .5rem 0; }
-  .nav-links.active { opacity: 1; visibility: visible; transform: translateY(0); }
+  .nav-links a { padding: .5rem 0; width: 100%; }
+  .nav-links.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
   .nav-toggle { display: inline-flex; }
+  .nav-mobile-login { display: inline-flex; margin-top: 0.5rem; }
 
   .hero-main { padding: clamp(3rem, 5.5vw, 3.75rem) clamp(1.5rem, 6vw, 3.5rem) clamp(10rem, 24vw, 14rem); }
   .hero-content { max-width: min(92vw, 640px); }
