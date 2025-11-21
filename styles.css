@@ -1,6 +1,7 @@
 :root {
   --header-height: 72px;
   --font-family: 'Space Grotesk', sans-serif;
+  --font-family-accent: 'Sora', 'Space Grotesk', sans-serif;
   --color-primary: #1f3a93;
   --color-primary-light: #5866c3;
   --color-primary-muted: #8a9ad6;
@@ -32,6 +33,10 @@ body {
 
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
+
+.font-sora {
+  font-family: var(--font-family-accent);
+}
 
 button, .btn {
   font-family: inherit;
