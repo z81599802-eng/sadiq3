@@ -6,6 +6,7 @@
   const navLinks = document.querySelector('.nav-links');
   const backToTopBtn = document.querySelector('.back-to-top');
   const faqItems = document.querySelectorAll('.faq-item');
+  const yearTarget = document.querySelector('[data-current-year]');
 
   const toggleNavigation = () => {
     const expanded = navToggle.getAttribute('aria-expanded') === 'true';
@@ -75,5 +76,9 @@
 
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
+  }
+
+  if (yearTarget) {
+    yearTarget.textContent = new Date().getFullYear();
   }
 })();

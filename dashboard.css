@@ -1,5 +1,6 @@
 :root {
   --font-family: 'Space Grotesk', sans-serif;
+  --font-family-accent: 'Sora', 'Space Grotesk', sans-serif;
   --color-primary: #1f3a93;
   --color-primary-dark: #14286d;
   --color-primary-muted: rgba(31, 58, 147, 0.08);
@@ -30,6 +31,10 @@ body {
 body {
   display: flex;
   min-height: 100vh;
+}
+
+.font-sora {
+  font-family: var(--font-family-accent);
 }
 
 .dashboard-shell {
