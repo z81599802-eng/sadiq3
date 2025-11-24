@@ -227,7 +227,13 @@ button, .btn {
 .persona-card:nth-child(even){ transform: translateY(-20px); }
 .persona-card h3 { margin: 0; font-size: 1.35rem; color: var(--color-primary); }
 
-.hero-pricing { background: #fff; border-radius: 40px; box-shadow: var(--shadow-soft); }
+.hero-pricing {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  border-radius: 40px;
+  box-shadow: var(--shadow-soft);
+}
 .pricing-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 3rem; }
 .pricing-card {
   padding: 3rem 2.5rem; border-radius: 32px; background: #f5f7fa;
@@ -288,8 +294,8 @@ button, .btn {
     content: "";
     position: absolute;
     inset: 0 0 auto auto;
-    width: min(320px, 28vw);
-    height: min(400px, 30vw);
+    width: min(370px, 28vw);
+    height: min(370px, 30vw);
     background: url("https://lk.wissenglanz.in/i/b9fb1b0f-c783-4ae3-9f46-4ab823129fd7.png") center/cover no-repeat;
     opacity: 0.95;
     pointer-events: none;
