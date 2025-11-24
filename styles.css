@@ -96,6 +96,17 @@ button, .btn {
 .nav-toggle { background: transparent; border: none; display: none; color: var(--color-primary); padding: .5rem; border-radius: .75rem; }
 .nav-toggle i { transition: transform 0.3s ease; }
 .nav-toggle[aria-expanded="true"] i { transform: rotate(90deg); }
+.nav-login {
+  background: var(--color-primary);
+  color: #fff;
+  border: 1px solid var(--color-primary);
+}
+.nav-login:hover,
+.nav-login:focus {
+  background: #102462;
+  border-color: #102462;
+  color: #fff;
+}
 .nav-overlay {
   position: fixed;
   inset: 0;
@@ -146,19 +157,7 @@ button, .btn {
 .typewriter-heading { display: inline-flex; flex-direction: column; align-items: center; gap: 0.35rem; }
 .typewriter { position: relative; display: inline-block; min-height: 1.2em; padding-right: 0.22em; }
 .typewriter.no-caret::after { display: none; }
-.typewriter::after {
-  content: "";
-  position: absolute;
-  right: 0.02em;
-  bottom: 0.08em;
-  width: 2px;
-  height: 1em;
-  background: currentColor;
-  animation: caret-blink 1s steps(1) infinite;
-  opacity: 0.8;
-}
-
-@keyframes caret-blink { 50% { opacity: 0; } }
+.typewriter::after { display: none; }
 /* === hero section final === */
 
 /* 1) space under buttons so mock doesn’t crowd them */
@@ -413,6 +412,21 @@ button, .btn {
   .hero-cta { padding: 3rem 2rem; }
   .testimonial-title { font-size: 48px; line-height: 1.1; }
   .feature-card, .pricing-card, .testimonial-card { padding: 2rem; }
+  .testimonial-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.25rem;
+    padding: 0 0.25rem 0.75rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .testimonial-grid::-webkit-scrollbar { height: 8px; }
+  .testimonial-grid::-webkit-scrollbar-thumb { background: rgba(31,58,147,0.25); border-radius: 999px; }
+  .testimonial-card {
+    min-width: 85vw;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
   .site-footer { padding: 4rem 6vw 2.5rem; }
   .footer-bottom { align-items: center; text-align: center; padding-right: 5rem; }
   .hero-visual { width: 92vw; }

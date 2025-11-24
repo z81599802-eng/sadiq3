@@ -2,6 +2,7 @@
 (function () {
   'use strict';
 
+  const navbar = document.querySelector('.navbar');
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
   const navOverlay = document.querySelector('[data-nav-overlay]');
@@ -38,6 +39,19 @@
       }
     });
   }
+
+  document.addEventListener('click', (event) => {
+    if (!navLinks || !navToggle) return;
+    if (!navLinks.classList.contains('active')) return;
+
+    const target = event.target;
+    const clickedInsideNav = navbar && target instanceof Node && navbar.contains(target);
+    const clickedToggle = target instanceof Node && navToggle.contains(target);
+
+    if (!clickedInsideNav && !clickedToggle) {
+      setNavigationState(false);
+    }
+  });
 
   const closeNavOnResize = () => {
     if (!navLinks) return;
