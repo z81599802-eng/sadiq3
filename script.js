@@ -52,6 +52,7 @@
     navOverlay.addEventListener('click', () => setNavigationState(false));
   }
 
+
   faqItems.forEach((item) => {
     const questionBtn = item.querySelector('.faq-question');
     const answer = item.querySelector('.faq-answer');
