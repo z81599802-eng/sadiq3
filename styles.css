@@ -136,6 +136,23 @@ button, .btn {
 .hero-main h1 { font-size: clamp(2.6rem, 3.8vw + 1rem, 3.8rem); margin: 0; line-height: 1.04; font-weight: 600; letter-spacing: -0.01em; }
 .hero-description { font-size: 1.1rem; margin: 0; max-width: 46rem; color: rgba(255,255,255,.9); }
 
+.typewriter-heading { display: inline-flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+.typewriter { position: relative; display: inline-block; min-height: 1.2em; padding-right: 0.22em; }
+.typewriter.no-caret::after { display: none; }
+.typewriter::after {
+  content: "";
+  position: absolute;
+  right: 0.02em;
+  bottom: 0.08em;
+  width: 2px;
+  height: 1em;
+  background: currentColor;
+  animation: caret-blink 1s steps(1) infinite;
+  opacity: 0.8;
+}
+
+@keyframes caret-blink { 50% { opacity: 0; } }
+
 /* === hero section final === */
 
 /* 1) space under buttons so mock doesn’t crowd them */
@@ -270,6 +287,23 @@ button, .btn {
 .cta-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: flex-end; }
 .cta-actions .btn { white-space: nowrap; }
 
+@media (min-width: 1024px) {
+  .hero-testimonials { position: relative; overflow: visible; }
+  .hero-testimonials::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto auto;
+    width: min(320px, 28vw);
+    height: min(460px, 40vw);
+    transform: translate(18%, -6%);
+    background: url("https://lk.wissenglanz.in/i/b9fb1b0f-c783-4ae3-9f46-4ab823129fd7.jpg") center/cover no-repeat;
+    border-radius: 28px;
+    box-shadow: var(--shadow-subtle);
+    opacity: 0.95;
+    pointer-events: none;
+  }
+}
+
 /* footer */
 .site-footer { padding: 5rem 4vw 3rem; background: #0f172a; color: rgba(255,255,255,.85); margin-top: 6rem; position: relative; }
 .footer-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem; max-width: 1200px; margin: 0 auto 3rem; }
@@ -339,6 +373,7 @@ button, .btn {
     margin-top: 0.25rem;
     margin-bottom: 1.25rem;
   }
+  .typewriter-heading { align-items: center; }
   .feature-grid, .pricing-grid, .testimonial-grid, .persona-grid, .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-cta { flex-direction: column; text-align: center; }
   .cta-actions { justify-content: center; }
@@ -400,4 +435,5 @@ button, .btn {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .01ms !important; animation-iteration-count: 1 !important;
       transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .typewriter::after { display: none; }
 }

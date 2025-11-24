@@ -8,6 +8,7 @@
   const backToTopBtn = document.querySelector('.back-to-top');
   const faqItems = document.querySelectorAll('.faq-item');
   const yearTarget = document.querySelector('[data-current-year]');
+  const typewriterTargets = document.querySelectorAll('[data-typewriter]');
 
   const setNavigationState = (isOpen) => {
     if (!navToggle || !navLinks) return;
@@ -95,5 +96,54 @@
 
   if (yearTarget) {
     yearTarget.textContent = new Date().getFullYear();
+  }
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const runTypewriter = (element) => {
+    if (!element) return;
+    const text = element.getAttribute('data-text');
+
+    if (!text) return;
+
+    element.setAttribute('aria-label', text);
+
+    if (prefersReducedMotion) {
+      element.textContent = text;
+      element.classList.add('no-caret');
+      return;
+    }
+
+    let currentIndex = 0;
+    let isRemoving = false;
+
+    const tick = () => {
+      element.textContent = text.slice(0, currentIndex);
+
+      if (!isRemoving && currentIndex === text.length) {
+        setTimeout(() => {
+          isRemoving = true;
+          tick();
+        }, 1600);
+        return;
+      }
+
+      if (isRemoving && currentIndex === 0) {
+        isRemoving = false;
+        setTimeout(tick, 400);
+        return;
+      }
+
+      const delta = isRemoving ? -1 : 1;
+      const delay = isRemoving ? 45 : 85;
+      currentIndex += delta;
+      setTimeout(tick, delay);
+    };
+
+    tick();
+  };
+
+  if (typewriterTargets.length) {
+    typewriterTargets.forEach((element) => runTypewriter(element));
   }
 })();
