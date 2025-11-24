@@ -161,4 +161,80 @@
   if (typewriterTargets.length) {
     typewriterTargets.forEach((element) => runTypewriter(element));
   }
+
+  const testimonialGrid = document.querySelector('.testimonial-grid');
+  const testimonialCards = testimonialGrid ? Array.from(testimonialGrid.querySelectorAll('.testimonial-card')) : [];
+  const testimonialBreakpoint = 768;
+  let testimonialInterval;
+  let testimonialScrollTimeout;
+
+  const stopTestimonialRotation = () => {
+    if (testimonialInterval) {
+      window.clearInterval(testimonialInterval);
+      testimonialInterval = undefined;
+    }
+  };
+
+  const scheduleTestimonialRotation = () => {
+    if (!testimonialGrid || !testimonialCards.length) return;
+    if (prefersReducedMotion || window.innerWidth > testimonialBreakpoint) {
+      stopTestimonialRotation();
+      return;
+    }
+
+    stopTestimonialRotation();
+
+    const styles = getComputedStyle(testimonialGrid);
+    const gapValue = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+
+    testimonialInterval = window.setInterval(() => {
+      if (!testimonialGrid) return;
+
+      const cardWidth = testimonialCards[0].getBoundingClientRect().width;
+      const maxScrollLeft = testimonialGrid.scrollWidth - testimonialGrid.clientWidth;
+      const nextOffset = testimonialGrid.scrollLeft + cardWidth + gapValue;
+      const target = nextOffset > maxScrollLeft + 1 ? 0 : nextOffset;
+
+      testimonialGrid.scrollTo({ left: target, behavior: 'smooth' });
+    }, 5000);
+  };
+
+  const updateTestimonialSliderState = () => {
+    if (!testimonialGrid || !testimonialCards.length) return;
+
+    const enableSlider = window.innerWidth <= testimonialBreakpoint;
+    testimonialGrid.classList.toggle('is-slider', enableSlider);
+
+    if (!enableSlider) {
+      stopTestimonialRotation();
+      testimonialGrid.scrollTo({ left: 0, behavior: 'auto' });
+      return;
+    }
+
+    scheduleTestimonialRotation();
+  };
+
+  if (testimonialGrid && testimonialCards.length) {
+    updateTestimonialSliderState();
+    window.addEventListener('resize', updateTestimonialSliderState);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopTestimonialRotation();
+        return;
+      }
+      scheduleTestimonialRotation();
+    });
+
+    testimonialGrid.addEventListener('pointerdown', stopTestimonialRotation);
+    testimonialGrid.addEventListener('pointerup', scheduleTestimonialRotation);
+
+    testimonialGrid.addEventListener('scroll', () => {
+      if (!testimonialGrid.classList.contains('is-slider') || prefersReducedMotion) return;
+      stopTestimonialRotation();
+      if (testimonialScrollTimeout) {
+        window.clearTimeout(testimonialScrollTimeout);
+      }
+      testimonialScrollTimeout = window.setTimeout(scheduleTestimonialRotation, 2400);
+    });
+  }
 })();
