@@ -168,14 +168,14 @@
 
     const scroller = slider.querySelector('[data-slider-scroller]');
     const slides = Array.from(slider.querySelectorAll('[data-slider-slide]'));
-    const prevBtn = slider.querySelector('[data-slider-prev]');
-    const nextBtn = slider.querySelector('[data-slider-next]');
     const dotsContainer = slider.parentElement ? slider.parentElement.querySelector('[data-slider-dots]') : null;
 
     if (!scroller || !slides.length) return;
 
     let slidesPerView = 1;
     let pageCount = 1;
+    let autoPlayTimer = null;
+    const AUTO_PLAY_INTERVAL = 4800;
 
     const getSlidesPerView = () => {
       if (window.innerWidth >= 1200) return 3;
@@ -183,13 +183,15 @@
       return 1;
     };
 
+    const getActivePage = () => Math.round(scroller.scrollLeft / scroller.clientWidth) || 0;
+
     const scrollToPage = (pageIndex) => {
-      const target = Math.max(0, Math.min(pageIndex, pageCount - 1));
-      scroller.scrollTo({ left: target * scroller.clientWidth, behavior: 'smooth' });
+      const normalizedPage = pageCount ? ((pageIndex % pageCount) + pageCount) % pageCount : 0;
+      scroller.scrollTo({ left: normalizedPage * scroller.clientWidth, behavior: 'smooth' });
     };
 
     const syncControls = () => {
-      const activePage = Math.round(scroller.scrollLeft / scroller.clientWidth) || 0;
+      const activePage = getActivePage();
 
       if (dotsContainer) {
         dotsContainer.querySelectorAll('.slider-dot').forEach((dot, index) => {
@@ -200,9 +202,22 @@
           }
         });
       }
+    };
 
-      if (prevBtn) prevBtn.disabled = activePage === 0;
-      if (nextBtn) nextBtn.disabled = activePage >= pageCount - 1;
+    const stopAutoPlay = () => {
+      if (autoPlayTimer) {
+        window.clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+      }
+    };
+
+    const startAutoPlay = () => {
+      stopAutoPlay();
+      if (pageCount <= 1) return;
+      autoPlayTimer = window.setInterval(() => {
+        const nextPage = getActivePage() + 1;
+        scrollToPage(nextPage);
+      }, AUTO_PLAY_INTERVAL);
     };
 
     const renderDots = () => {
@@ -218,31 +233,23 @@
         if (index === 0) {
           dot.setAttribute('aria-current', 'true');
         }
-        dot.addEventListener('click', () => scrollToPage(index));
+        dot.addEventListener('click', () => {
+          scrollToPage(index);
+          startAutoPlay();
+        });
         dotsContainer.appendChild(dot);
       }
     };
 
     const updateSlidesPerView = () => {
+      const activePage = getActivePage();
       slidesPerView = getSlidesPerView();
       scroller.style.setProperty('--slides-per-view', String(slidesPerView));
       renderDots();
-      scrollToPage(Math.round(scroller.scrollLeft / scroller.clientWidth) || 0);
+      scrollToPage(Math.min(activePage, pageCount - 1));
       syncControls();
+      startAutoPlay();
     };
-
-    const handleNav = (direction) => {
-      const activePage = Math.round(scroller.scrollLeft / scroller.clientWidth) || 0;
-      scrollToPage(activePage + direction);
-    };
-
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => handleNav(-1));
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => handleNav(1));
-    }
 
     scroller.addEventListener('scroll', () => {
       window.requestAnimationFrame(syncControls);
@@ -251,6 +258,11 @@
     window.addEventListener('resize', () => {
       window.requestAnimationFrame(updateSlidesPerView);
     });
+
+    slider.addEventListener('pointerenter', stopAutoPlay);
+    slider.addEventListener('pointerleave', startAutoPlay);
+    slider.addEventListener('focusin', stopAutoPlay);
+    slider.addEventListener('focusout', startAutoPlay);
 
     updateSlidesPerView();
   };
