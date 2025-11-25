@@ -220,7 +220,7 @@ button, .btn {
 .persona-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-top: 3rem; }
 .persona-card {
   padding: 2.5rem; border-radius: 24px; background: #f9faff;
-  border: none; box-shadow: 0 18px 45px rgba(31,58,147,.1);
+  border: 1px solid rgba(31,58,147,.08); box-shadow: 0 18px 45px rgba(31,58,147,.1);
   position: relative;
 }
 .persona-card:nth-child(odd){ transform: translateY(20px); }
@@ -238,7 +238,7 @@ button, .btn {
 .pricing-card {
   padding: 3rem 2.5rem; border-radius: 32px; background: #f5f7fa;
   display: flex; flex-direction: column; gap: 1.5rem; position: relative; overflow: hidden;
-  border: none; transition: var(--transition-base);
+  border: 1px solid rgba(31,58,147,.08); transition: var(--transition-base);
 }
 .pricing-card:hover { background: #fff; transform: translateY(-10px); box-shadow: var(--shadow-soft); }
 .pricing-card header h3 { margin: 0; font-size: 1.5rem; color: var(--color-primary); }
@@ -261,7 +261,7 @@ button, .btn {
   gap: 2.5rem;
   grid-template-columns: minmax(0, 1fr);
   overflow: hidden;
-  background: var(--color-surface);
+  background: #f5f7fa;
   border-radius: 32px;
   box-shadow: var(--shadow-subtle);
   padding: clamp(3rem, 5vw, 4rem);
@@ -274,7 +274,7 @@ button, .btn {
   align-items: stretch;
   gap: 1rem;
   position: relative;
-  background: var(--color-surface);
+  background: #f5f7fa;
   border-radius: 28px;
   padding: 1.25rem;
 }
@@ -294,12 +294,12 @@ button, .btn {
 .testimonial-scroller { -ms-overflow-style: none; scrollbar-width: none; }
 .testimonial-card {
   background: #fff; border-radius: 28px; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.25rem;
-  box-shadow: var(--shadow-subtle); border: none; position: relative; overflow: hidden;
+  position: relative; overflow: hidden;
   flex: 0 0 calc((100% - (var(--slides-per-view) - 1) * var(--slide-gap)) / var(--slides-per-view));
   scroll-snap-align: start;
 }
 .testimonial-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(31,58,147,0) 0%, rgba(31,58,147,.05) 100%); pointer-events: none; }
-.quote-mark { font-size: 4rem; line-height: 1; color: rgba(31,58,147,.15); display: block; }
+.quote-mark { font-size: 10rem; line-height: 1; color: rgba(31,58,147,.15); display: block; }
 .testimonial-text { font-size: 1.08rem; color: rgba(17,25,40,.85); margin: 0; }
 .testimonial-name { font-weight: 700; color: var(--color-primary); margin: 0; letter-spacing: .01em; }
 .slider-dots { display: flex; gap: .75rem; margin-top: .5rem; align-items: center; }
@@ -334,7 +334,7 @@ button, .btn {
     content: "";
     position: absolute;
     inset: 0 0 auto auto;
-    width: min(370px, 28vw);
+    width: min(370px, 25vw);
     height: min(370px, 30vw);
     background: url("https://lk.wissenglanz.in/i/b9fb1b0f-c783-4ae3-9f46-4ab823129fd7.png") center/cover no-repeat;
     opacity: 0.95;
@@ -424,7 +424,6 @@ button, .btn {
     margin-bottom: 1.25rem;
   }
   .feature-grid, .pricing-grid, .persona-grid, .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .hero-cta { flex-direction: column; text-align: center; }
   .cta-actions { justify-content: center; }
   .persona-card:nth-child(odd), .persona-card:nth-child(even) { transform: none; }
   .hero-visual { width: min(90vw, 680px); }
