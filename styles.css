@@ -444,7 +444,8 @@ button, .btn {
   .hero-main h1 { font-size: clamp(2.4rem, 6vw, 3.1rem); margin-bottom: 0.9rem; }
   .hero-actions { margin-top: 0.4rem; margin-bottom: clamp(1.25rem, 5vw, 2rem); }
   .hero-description { font-size: 1rem; }
-  .hero-cta { padding: 3rem 2rem; }
+  .hero-cta { flex-direction: column; align-items: flex-start; padding: 3rem 2rem; }
+  .cta-actions { width: 100%; justify-content: flex-start; }
   .testimonial-title { font-size: 48px; line-height: 1.1; }
   .feature-card, .pricing-card, .testimonial-card { padding: 2rem; }
   .site-footer { padding: 4rem 6vw 2.5rem; }
