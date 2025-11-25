@@ -220,7 +220,7 @@ button, .btn {
 .persona-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-top: 3rem; }
 .persona-card {
   padding: 2.5rem; border-radius: 24px; background: #f9faff;
-  border: 1px solid rgba(31,58,147,.08); box-shadow: 0 18px 45px rgba(31,58,147,.1);
+  border: none; box-shadow: 0 18px 45px rgba(31,58,147,.1);
   position: relative;
 }
 .persona-card:nth-child(odd){ transform: translateY(20px); }
@@ -238,7 +238,7 @@ button, .btn {
 .pricing-card {
   padding: 3rem 2.5rem; border-radius: 32px; background: #f5f7fa;
   display: flex; flex-direction: column; gap: 1.5rem; position: relative; overflow: hidden;
-  border: 1px solid rgba(31,58,147,.08); transition: var(--transition-base);
+  border: none; transition: var(--transition-base);
 }
 .pricing-card:hover { background: #fff; transform: translateY(-10px); box-shadow: var(--shadow-soft); }
 .pricing-card header h3 { margin: 0; font-size: 1.5rem; color: var(--color-primary); }
@@ -294,7 +294,7 @@ button, .btn {
 .testimonial-scroller { -ms-overflow-style: none; scrollbar-width: none; }
 .testimonial-card {
   background: #fff; border-radius: 28px; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.25rem;
-  box-shadow: var(--shadow-subtle); border: 1px solid rgba(31,58,147,.1); position: relative; overflow: hidden;
+  box-shadow: var(--shadow-subtle); border: none; position: relative; overflow: hidden;
   flex: 0 0 calc((100% - (var(--slides-per-view) - 1) * var(--slide-gap)) / var(--slides-per-view));
   scroll-snap-align: start;
 }

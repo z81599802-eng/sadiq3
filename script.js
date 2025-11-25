@@ -167,41 +167,49 @@
     if (!slider) return;
 
     const scroller = slider.querySelector('[data-slider-scroller]');
-    const slides = Array.from(slider.querySelectorAll('[data-slider-slide]'));
+    const originalSlides = Array.from(slider.querySelectorAll('[data-slider-slide]'));
     const dotsContainer = slider.parentElement ? slider.parentElement.querySelector('[data-slider-dots]') : null;
 
-    if (!scroller || !slides.length) return;
+    if (!scroller || !originalSlides.length) return;
 
-    let slidesPerView = 1;
-    let pageCount = 1;
-    let autoPlayTimer = null;
+    const totalSlides = originalSlides.length;
     const AUTO_PLAY_INTERVAL = 4800;
-
-    const getSlidesPerView = () => {
-      if (window.innerWidth >= 1200) return 3;
-      if (window.innerWidth >= 768) return 2;
-      return 1;
+    const clones = {
+      first: originalSlides[0].cloneNode(true),
+      last: originalSlides[originalSlides.length - 1].cloneNode(true),
     };
 
-    const getActivePage = () => Math.round(scroller.scrollLeft / scroller.clientWidth) || 0;
+    scroller.insertBefore(clones.last, originalSlides[0]);
+    scroller.appendChild(clones.first);
+    scroller.style.setProperty('--slides-per-view', '1');
 
-    const scrollToPage = (pageIndex) => {
-      const normalizedPage = pageCount ? ((pageIndex % pageCount) + pageCount) % pageCount : 0;
-      scroller.scrollTo({ left: normalizedPage * scroller.clientWidth, behavior: 'smooth' });
+    let slideFullWidth = 0;
+    let currentIndex = 0;
+    let autoPlayTimer = null;
+
+    const getGapValue = () => {
+      const styles = window.getComputedStyle(scroller);
+      const gapValue = parseFloat(styles.columnGap || styles.gap || '0');
+      return Number.isNaN(gapValue) ? 0 : gapValue;
     };
 
-    const syncControls = () => {
-      const activePage = getActivePage();
+    const measureSlideWidth = () => {
+      const firstSlide = scroller.querySelector('[data-slider-slide]');
+      const gap = getGapValue();
+      if (!firstSlide) return 0;
+      const { width } = firstSlide.getBoundingClientRect();
+      return width + gap;
+    };
 
-      if (dotsContainer) {
-        dotsContainer.querySelectorAll('.slider-dot').forEach((dot, index) => {
-          if (index === activePage) {
-            dot.setAttribute('aria-current', 'true');
-          } else {
-            dot.removeAttribute('aria-current');
-          }
-        });
-      }
+    const syncDots = () => {
+      if (!dotsContainer) return;
+      dotsContainer.querySelectorAll('.slider-dot').forEach((dot, index) => {
+        if (index === currentIndex) {
+          dot.setAttribute('aria-current', 'true');
+        } else {
+          dot.removeAttribute('aria-current');
+        }
+      });
     };
 
     const stopAutoPlay = () => {
@@ -211,21 +219,33 @@
       }
     };
 
+    const goToIndex = (targetIndex, behavior = 'smooth') => {
+      const normalizedIndex = ((targetIndex % totalSlides) + totalSlides) % totalSlides;
+      let destinationIndex = targetIndex;
+
+      if (targetIndex >= totalSlides) {
+        destinationIndex = totalSlides; // move to first clone for seamless forward loop
+      } else if (targetIndex < 0) {
+        destinationIndex = -1; // move to last clone when navigating backward
+      }
+
+      scroller.scrollTo({ left: (destinationIndex + 1) * slideFullWidth, behavior });
+      currentIndex = normalizedIndex;
+      syncDots();
+    };
+
     const startAutoPlay = () => {
       stopAutoPlay();
-      if (pageCount <= 1) return;
+      if (totalSlides <= 1) return;
       autoPlayTimer = window.setInterval(() => {
-        const nextPage = getActivePage() + 1;
-        scrollToPage(nextPage);
+        goToIndex(currentIndex + 1);
       }, AUTO_PLAY_INTERVAL);
     };
 
     const renderDots = () => {
       if (!dotsContainer) return;
       dotsContainer.innerHTML = '';
-      pageCount = Math.max(1, Math.ceil(slides.length / slidesPerView));
-
-      for (let index = 0; index < pageCount; index += 1) {
+      for (let index = 0; index < totalSlides; index += 1) {
         const dot = document.createElement('button');
         dot.type = 'button';
         dot.className = 'slider-dot';
@@ -234,29 +254,49 @@
           dot.setAttribute('aria-current', 'true');
         }
         dot.addEventListener('click', () => {
-          scrollToPage(index);
+          goToIndex(index);
           startAutoPlay();
         });
         dotsContainer.appendChild(dot);
       }
     };
 
-    const updateSlidesPerView = () => {
-      const activePage = getActivePage();
-      slidesPerView = getSlidesPerView();
-      scroller.style.setProperty('--slides-per-view', String(slidesPerView));
-      renderDots();
-      scrollToPage(Math.min(activePage, pageCount - 1));
-      syncControls();
-      startAutoPlay();
+    const recalcWidthAndPosition = () => {
+      slideFullWidth = measureSlideWidth();
+      if (slideFullWidth <= 0) return;
+      scroller.scrollTo({ left: (currentIndex + 1) * slideFullWidth, behavior: 'auto' });
+    };
+
+    const handleInfiniteEdges = () => {
+      if (slideFullWidth <= 0) return;
+      const forwardLimit = slideFullWidth * (totalSlides + 0.5);
+      const backwardLimit = slideFullWidth * 0.5;
+
+      if (scroller.scrollLeft >= forwardLimit) {
+        scroller.scrollTo({ left: slideFullWidth, behavior: 'auto' });
+      } else if (scroller.scrollLeft <= backwardLimit) {
+        scroller.scrollTo({ left: slideFullWidth * totalSlides, behavior: 'auto' });
+      }
+    };
+
+    const syncIndexFromScroll = () => {
+      if (slideFullWidth <= 0) return;
+      const rawIndex = Math.round(scroller.scrollLeft / slideFullWidth) - 1;
+      currentIndex = ((rawIndex % totalSlides) + totalSlides) % totalSlides;
+      syncDots();
     };
 
     scroller.addEventListener('scroll', () => {
-      window.requestAnimationFrame(syncControls);
+      window.requestAnimationFrame(() => {
+        handleInfiniteEdges();
+        syncIndexFromScroll();
+      });
     });
 
     window.addEventListener('resize', () => {
-      window.requestAnimationFrame(updateSlidesPerView);
+      window.requestAnimationFrame(() => {
+        recalcWidthAndPosition();
+      });
     });
 
     slider.addEventListener('pointerenter', stopAutoPlay);
@@ -264,7 +304,12 @@
     slider.addEventListener('focusin', stopAutoPlay);
     slider.addEventListener('focusout', startAutoPlay);
 
-    updateSlidesPerView();
+    renderDots();
+    window.requestAnimationFrame(() => {
+      slideFullWidth = measureSlideWidth();
+      scroller.scrollTo({ left: slideFullWidth, behavior: 'auto' });
+      startAutoPlay();
+    });
   };
 
   initTestimonialSlider();
