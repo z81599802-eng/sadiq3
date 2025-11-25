@@ -174,18 +174,24 @@
 
     const totalSlides = originalSlides.length;
     const AUTO_PLAY_INTERVAL = 4800;
-    const clones = {
-      first: originalSlides[0].cloneNode(true),
-      last: originalSlides[originalSlides.length - 1].cloneNode(true),
-    };
-
-    scroller.insertBefore(clones.last, originalSlides[0]);
-    scroller.appendChild(clones.first);
-    scroller.style.setProperty('--slides-per-view', '1');
+    const getSlidesPerView = () => (window.matchMedia('(min-width: 1024px)').matches ? 3 : 1);
 
     let slideFullWidth = 0;
+    let slidesPerView = getSlidesPerView();
     let currentIndex = 0;
     let autoPlayTimer = null;
+
+    const buildTrack = () => {
+      scroller.innerHTML = '';
+      const prefixClones = originalSlides.slice(-slidesPerView).map((slide) => slide.cloneNode(true));
+      const suffixClones = originalSlides.slice(0, slidesPerView).map((slide) => slide.cloneNode(true));
+
+      prefixClones.forEach((clone) => scroller.appendChild(clone));
+      originalSlides.forEach((slide) => scroller.appendChild(slide));
+      suffixClones.forEach((clone) => scroller.appendChild(clone));
+
+      scroller.style.setProperty('--slides-per-view', String(slidesPerView));
+    };
 
     const getGapValue = () => {
       const styles = window.getComputedStyle(scroller);
@@ -221,15 +227,15 @@
 
     const goToIndex = (targetIndex, behavior = 'smooth') => {
       const normalizedIndex = ((targetIndex % totalSlides) + totalSlides) % totalSlides;
-      let destinationIndex = targetIndex;
+      let destinationIndex = targetIndex + slidesPerView;
 
       if (targetIndex >= totalSlides) {
-        destinationIndex = totalSlides; // move to first clone for seamless forward loop
+        destinationIndex = totalSlides + slidesPerView;
       } else if (targetIndex < 0) {
-        destinationIndex = -1; // move to last clone when navigating backward
+        destinationIndex = slidesPerView - 1;
       }
 
-      scroller.scrollTo({ left: (destinationIndex + 1) * slideFullWidth, behavior });
+      scroller.scrollTo({ left: destinationIndex * slideFullWidth, behavior });
       currentIndex = normalizedIndex;
       syncDots();
     };
@@ -264,24 +270,25 @@
     const recalcWidthAndPosition = () => {
       slideFullWidth = measureSlideWidth();
       if (slideFullWidth <= 0) return;
-      scroller.scrollTo({ left: (currentIndex + 1) * slideFullWidth, behavior: 'auto' });
+      scroller.scrollTo({ left: (currentIndex + slidesPerView) * slideFullWidth, behavior: 'auto' });
     };
 
     const handleInfiniteEdges = () => {
       if (slideFullWidth <= 0) return;
-      const forwardLimit = slideFullWidth * (totalSlides + 0.5);
-      const backwardLimit = slideFullWidth * 0.5;
+      const forwardLimit = slideFullWidth * (totalSlides + slidesPerView - 0.5);
+      const backwardLimit = slideFullWidth * (slidesPerView - 0.5);
+      const lastRealOffset = slideFullWidth * (totalSlides + slidesPerView - 1);
 
       if (scroller.scrollLeft >= forwardLimit) {
-        scroller.scrollTo({ left: slideFullWidth, behavior: 'auto' });
+        scroller.scrollTo({ left: slideFullWidth * slidesPerView, behavior: 'auto' });
       } else if (scroller.scrollLeft <= backwardLimit) {
-        scroller.scrollTo({ left: slideFullWidth * totalSlides, behavior: 'auto' });
+        scroller.scrollTo({ left: lastRealOffset, behavior: 'auto' });
       }
     };
 
     const syncIndexFromScroll = () => {
       if (slideFullWidth <= 0) return;
-      const rawIndex = Math.round(scroller.scrollLeft / slideFullWidth) - 1;
+      const rawIndex = Math.round(scroller.scrollLeft / slideFullWidth) - slidesPerView;
       currentIndex = ((rawIndex % totalSlides) + totalSlides) % totalSlides;
       syncDots();
     };
@@ -293,9 +300,23 @@
       });
     });
 
+    const rebuildForLayout = () => {
+      const nextSlidesPerView = getSlidesPerView();
+      if (nextSlidesPerView === slidesPerView) {
+        recalcWidthAndPosition();
+        return;
+      }
+
+      slidesPerView = nextSlidesPerView;
+      stopAutoPlay();
+      buildTrack();
+      recalcWidthAndPosition();
+      startAutoPlay();
+    };
+
     window.addEventListener('resize', () => {
       window.requestAnimationFrame(() => {
-        recalcWidthAndPosition();
+        rebuildForLayout();
       });
     });
 
@@ -306,8 +327,9 @@
 
     renderDots();
     window.requestAnimationFrame(() => {
+      buildTrack();
       slideFullWidth = measureSlideWidth();
-      scroller.scrollTo({ left: slideFullWidth, behavior: 'auto' });
+      scroller.scrollTo({ left: slideFullWidth * slidesPerView, behavior: 'auto' });
       startAutoPlay();
     });
   };
