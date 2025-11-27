@@ -440,7 +440,20 @@ button, .btn {
 }
 
 @media (max-width: 768px) {
-  .feature-grid, .pricing-grid, .persona-grid, .footer-grid { grid-template-columns: 1fr; }
+  .feature-grid, .persona-grid, .footer-grid { grid-template-columns: 1fr; }
+  .pricing-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.25rem;
+    padding: 0.25rem 0.5rem 0.5rem;
+  }
+  .pricing-grid::-webkit-scrollbar { display: none; }
+  .pricing-grid { scrollbar-width: none; }
+  .pricing-card {
+    min-width: min(88vw, 440px);
+    scroll-snap-align: start;
+  }
   .hero { padding: 4.5rem 6vw; }
   .hero-main { padding: 3.25rem 1.5rem 9rem; min-height: clamp(520px, 95vh, 760px); }
   .hero-content { gap: 0.9rem; }
