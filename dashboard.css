@@ -614,6 +614,22 @@ body { display: flex; min-height: 100vh; }
   min-width: 0;
 }
 
+@media (max-width: 640px) {
+  .update-form {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .checkbox-field {
   display: flex;
   align-items: flex-start;
