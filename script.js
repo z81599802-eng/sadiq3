@@ -1,7 +1,21 @@
 /* global lucide */
 (function () {
   'use strict';
-
+  
+  /**
+   * Debounce function to limit the rate at which a function can fire.
+   * @param {Function} func The function to debounce.
+   * @param {number} delay The delay in milliseconds.
+   * @returns {Function} The debounced function.y
+   */
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
+  
   const navbar = document.querySelector('.navbar');
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
@@ -60,7 +74,7 @@
     }
   };
 
-  window.addEventListener('resize', closeNavOnResize);
+  window.addEventListener('resize', debounce(closeNavOnResize, 200));
 
   if (navOverlay) {
     navOverlay.addEventListener('click', () => setNavigationState(false));
@@ -82,9 +96,12 @@
         answer.style.maxHeight = `${answer.scrollHeight}px`;
       } else {
         answer.style.maxHeight = '0';
-        setTimeout(() => {
-          answer.style.maxHeight = '';
-        }, 300);
+        // Remove maxHeight after transition to allow for resizing
+        answer.addEventListener('transitionend', () => {
+          if (!item.classList.contains('active')) {
+            answer.style.maxHeight = null;
+          }
+        }, { once: true });
       }
     });
   });
@@ -102,7 +119,7 @@
     backToTopBtn.style.pointerEvents = shouldShow ? 'auto' : 'none';
   };
 
-  window.addEventListener('scroll', updateBackToTopVisibility);
+  window.addEventListener('scroll', debounce(updateBackToTopVisibility, 150));
   updateBackToTopVisibility();
 
   if (typeof lucide !== 'undefined') {
@@ -275,7 +292,6 @@
 
     const handleInfiniteEdges = () => {
       if (slideFullWidth <= 0) return;
-
       const forwardResetPoint = slideFullWidth * (totalSlides + slidesPerView);
       const backwardResetPoint = slideFullWidth * (slidesPerView - 1);
 
@@ -316,11 +332,7 @@
       startAutoPlay();
     };
 
-    window.addEventListener('resize', () => {
-      window.requestAnimationFrame(() => {
-        rebuildForLayout();
-      });
-    });
+    window.addEventListener('resize', debounce(rebuildForLayout, 200));
 
     slider.addEventListener('pointerenter', stopAutoPlay);
     slider.addEventListener('pointerleave', startAutoPlay);
