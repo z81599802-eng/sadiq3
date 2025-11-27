@@ -478,7 +478,11 @@ button, .btn {
   .hero-actions { margin-top: 0.4rem; margin-bottom: clamp(1.25rem, 5vw, 2rem); }
   .hero-subtitle { letter-spacing: .1em; font-size: .85rem; }
   .section-intro h2 {line-height: 2.5rem;}
-  .cta-actions .btn { white-space: normal; }
+  .cta-actions .btn {
+    white-space: nowrap;
+    font-size: 0.95rem;
+    padding: 0.85rem 1.6rem;
+  }
   .testimonial-card { padding: 2.75rem 1.5rem 2rem; }
   .quote-mark { font-size: 3.9rem; top: 0.85rem; left: 0.95rem; }
 }
