@@ -1252,8 +1252,10 @@ body { display: flex; min-height: 100vh; }
 
   .profile-quick-actions {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    align-items: stretch;
     flex-wrap: nowrap;
+    flex-direction: column;
     gap: 0.5rem;
   }
 
@@ -1261,6 +1263,8 @@ body { display: flex; min-height: 100vh; }
     padding: 0.55rem 1rem;
     font-size: 0.95rem;
     white-space: nowrap;
+    width: 100%;
+    justify-content: center;
   }
 }
 
