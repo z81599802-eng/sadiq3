@@ -283,8 +283,8 @@
         const offsetIntoLoop = scroller.scrollLeft - forwardResetPoint;
         scroller.scrollTo({ left: slideFullWidth * slidesPerView + offsetIntoLoop, behavior: 'auto' });
       } else if (scroller.scrollLeft <= backwardResetPoint) {
-        const offsetIntoLoop = backwardResetPoint - scroller.scrollLeft;
-        scroller.scrollTo({ left: slideFullWidth * (totalSlides + slidesPerView) - offsetIntoLoop, behavior: 'auto' });
+        const destination = scroller.scrollLeft + slideFullWidth * totalSlides;
+        scroller.scrollTo({ left: destination, behavior: 'auto' });
       }
     };
 
