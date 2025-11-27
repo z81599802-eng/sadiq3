@@ -1,6 +1,6 @@
 :root {
   --font-family: 'Space Grotesk', sans-serif;
-  --font-family-accent: 'Sora', 'Inter', 'Space Grotesk', sans-serif;
+  --font-family-accent: 'Sora', 'Space Grotesk', sans-serif;
   --color-primary: #1f3a93;
   --color-primary-dark: #14286d;
   --color-primary-muted: rgba(31, 58, 147, 0.08);
@@ -28,28 +28,16 @@ body {
   color: var(--color-text);
 }
 
-body {
-  display: flex;
-  min-height: 100vh;
-}
-
-.font-sora {
-  font-family: var(--font-family-accent);
-}
+body { display: flex; min-height: 100vh; }
 
 .dashboard-shell {
-  display: grid;
-  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-  width: 100%;
-  min-height: 100vh;
+  display: grid; grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  width: 100%; min-height: 100vh;
   background: linear-gradient(145deg, rgba(31, 58, 147, 0.08) 0%, rgba(31, 58, 147, 0) 60%);
   transition: grid-template-columns var(--transition-base);
 }
 
-::selection{
-  color: #ffffff;
-  background-color: #1f3a93;
-}
+::selection{ color: #ffffff; background-color: #1f3a93; }
 
 .sidebar {
   width: var(--sidebar-width);
@@ -64,18 +52,13 @@ body {
   height: 100vh;
   min-height: 100%;
   box-shadow: 12px 0 32px rgba(20, 40, 109, 0.08);
-  z-index: 3;
-  opacity: 1;
+  z-index: 3; opacity: 1;
   visibility: visible;
   transition: opacity var(--transition-base), visibility var(--transition-base), transform var(--transition-base);
 }
 
 .sidebar-top {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  flex: 1;
-}
+  display: flex; flex-direction: column; gap: 2rem; flex: 1; }
 
 .brand {
   display: inline-flex;
@@ -124,10 +107,7 @@ body {
 }
 
 .nav-link i {
-  width: 1.2rem;
-  height: 1.2rem;
-  color: var(--color-primary);
-}
+  width: 1.2rem; height: 1.2rem; color: var(--color-primary); }
 
 .nav-link:hover,
 .nav-link:focus-visible {
@@ -146,11 +126,7 @@ body {
   color: var(--color-primary);
 }
 
-.sidebar-bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
+.sidebar-bottom { display: flex; flex-direction: column; gap: 0.65rem; }
 
 .sidebar-section-label {
   font-size: 0.85rem;
@@ -205,9 +181,7 @@ body {
   outline: none;
 }
 
-.icon-mobile {
-  display: none;
-}
+.icon-mobile { display: none; }
 
 .page-title {
   margin: 0;
@@ -228,20 +202,11 @@ body {
     padding-bottom: 0.75rem;
   }
 
-  .sidebar-toggle {
-    grid-area: toggle;
-  }
+  .sidebar-toggle { grid-area: toggle; }
 
-  .page-title {
-    grid-area: title;
-    text-align: left;
-    align-self: center;
-  }
+  .page-title { grid-area: title; text-align: left; align-self: center; }
 
-  .btn-logout {
-    grid-area: logout;
-    justify-self: end;
-  }
+  .btn-logout { grid-area: logout; justify-self: end; }
 }
 
 .btn-logout {
@@ -267,10 +232,7 @@ body {
   outline: none;
 }
 
-.btn-logout i {
-  width: 1.1rem;
-  height: 1.1rem;
-}
+.btn-logout i { width: 1.1rem; height: 1.1rem; }
 
 .content-area {/*change3*/
   flex: 1;
@@ -282,7 +244,6 @@ body {
 }
 
 .page-content {/*change4*/
-
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -297,7 +258,6 @@ body {
 }
 
 .dashboard-frame {/*change5*/
- 
   border: none;
   display: block;
   width: 100%;
@@ -326,8 +286,6 @@ body {
   pointer-events: none;
   transition: opacity var(--transition-base);
 }
-
-
 
 .dashboard-shell[data-sidebar-state="open"] .sidebar {
   opacity: 1;
@@ -368,43 +326,31 @@ body {
 }
 
 .campaign-page {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  width: 100%;
-  padding: 2rem;
-  box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 2rem; width: 100%; padding: 2rem; box-sizing: border-box;
   font-family: var(--font-family-accent);
 }
 
 .campaign-hero {
   background: radial-gradient(circle at top left, rgba(31, 58, 147, 0.15), rgba(31, 58, 147, 0.05));
-  border-radius: 24px;
-  padding: clamp(1.5rem, 3vw, 2.75rem);
-  border: 1px solid rgba(31, 58, 147, 0.08);
-  box-shadow: 0 24px 60px rgba(20, 40, 109, 0.08);
+  border-radius: 24px; padding: clamp(1.5rem, 3vw, 2.75rem);
+  border: 1px solid rgba(31, 58, 147, 0.08); box-shadow: 0 24px 60px rgba(20, 40, 109, 0.08);
 }
 
 .campaign-hero__text h2 {
-  font-size: clamp(1.6rem, 2.5vw, 2.5rem);
-  margin: 0 0 1rem;
+  font-size: clamp(1.6rem, 2.5vw, 2.5rem); margin: 0 0 1rem;
 }
 
 .campaign-hero__text p {
-  margin: 0 0 1.5rem;
-  color: var(--color-text-muted);
+  margin: 0 0 1.5rem; color: var(--color-text-muted);
 }
 
 .campaign-hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
 }
 
 .eyebrow-text {
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.85rem;
+  letter-spacing: 0.1em; font-size: 0.85rem;
   color: var(--color-primary-dark);
   margin-bottom: 0.5rem;
 }
@@ -429,14 +375,12 @@ body {
 }
 
 .btn:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+  opacity: 0.65; cursor: not-allowed;
 }
 
 .btn-primary {
   background: var(--color-primary);
-  color: #fff;
-  box-shadow: 0 12px 34px rgba(31, 58, 147, 0.25);
+  color: #fff; box-shadow: 0 12px 34px rgba(31, 58, 147, 0.25);
 }
 
 .btn-primary:hover,
@@ -467,8 +411,7 @@ body {
 }
 
 .btn-small {
-  padding: 0.45rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.45rem 1rem; font-size: 0.9rem;
 }
 
 .section-heading {
@@ -480,13 +423,11 @@ body {
 }
 
 .section-heading h3 {
-  margin: 0;
-  font-size: 1.35rem;
+  margin: 0; font-size: 1.35rem;
 }
 
 .section-heading p {
-  margin: 0.25rem 0 0;
-  color: var(--color-text-muted);
+  margin: 0.25rem 0 0; color: var(--color-text-muted);
 }
 
 .campaign-filters,
@@ -501,28 +442,19 @@ body {
 }
 
 .filters-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: flex; flex-direction: column; gap: 1.5rem;
 }
 
 .filters-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: flex-end;
+  display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;
 }
 
 .filters-row .form-field {
-  flex: 1 1 320px;
-  min-width: 260px;
+  flex: 1 1 320px; min-width: 260px;
 }
 
 .filters-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: nowrap;
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: nowrap;
 }
 
 .filters-grid {
@@ -532,10 +464,7 @@ body {
 }
 
 .form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.95rem;
+  display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.95rem;
 }
 
 .campaign-update .form-field,
