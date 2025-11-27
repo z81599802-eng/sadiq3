@@ -275,14 +275,16 @@
 
     const handleInfiniteEdges = () => {
       if (slideFullWidth <= 0) return;
-      const forwardLimit = slideFullWidth * (totalSlides + slidesPerView - 0.5);
-      const backwardLimit = slideFullWidth * (slidesPerView - 0.5);
-      const lastRealOffset = slideFullWidth * (totalSlides + slidesPerView - 1);
 
-      if (scroller.scrollLeft >= forwardLimit) {
-        scroller.scrollTo({ left: slideFullWidth * slidesPerView, behavior: 'auto' });
-      } else if (scroller.scrollLeft <= backwardLimit) {
-        scroller.scrollTo({ left: lastRealOffset, behavior: 'auto' });
+      const forwardResetPoint = slideFullWidth * (totalSlides + slidesPerView);
+      const backwardResetPoint = slideFullWidth * (slidesPerView - 1);
+
+      if (scroller.scrollLeft >= forwardResetPoint) {
+        const offsetIntoLoop = scroller.scrollLeft - forwardResetPoint;
+        scroller.scrollTo({ left: slideFullWidth * slidesPerView + offsetIntoLoop, behavior: 'auto' });
+      } else if (scroller.scrollLeft <= backwardResetPoint) {
+        const destination = scroller.scrollLeft + slideFullWidth * totalSlides;
+        scroller.scrollTo({ left: destination, behavior: 'auto' });
       }
     };
 
