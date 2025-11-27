@@ -1398,3 +1398,10 @@ body { display: flex; min-height: 100vh; }
     --dashboard-viewport: calc(100dvh - var(--header-height));
   }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  /* this targets touch devices */
+  a, button, .card {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
