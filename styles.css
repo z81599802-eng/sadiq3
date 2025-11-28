@@ -250,7 +250,22 @@ button, .btn {
   grid-template-columns: minmax(0, 1fr);
   overflow: hidden;  background: #f5f7fa;
   border-radius: 32px; box-shadow: var(--shadow-subtle); padding: clamp(3rem, 5vw, 4rem);
+  position: relative;
 }
+.hero-testimonials::after {
+  content: "";
+  position: absolute;
+  top: 55%;
+  right: clamp(-120px, -12vw, -48px);
+  transform: translateY(-50%);
+  width: min(260px, 70vw);
+  height: min(260px, 70vw);
+  background: url("https://lk.wissenglanz.in/i/b9fb1b0f-c783-4ae3-9f46-4ab823129fd7.png") center/cover no-repeat;
+  opacity: 0.28;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-testimonials > * { position: relative; z-index: 1; }
 .testimonials-header { max-width: 640px; }
 .testimonial-subtitle { font-weight: 500; font-size: 32px; line-height: 32px; margin: 0; color: var(--color-dark); }
 .testimonial-title { font-weight: 500; font-size: clamp(2.5rem, 6vw, 80px); line-height: clamp(2.5rem, 6vw, 80px); margin: .75rem 0 0; color: var(--color-dark); }
@@ -307,16 +322,14 @@ button, .btn {
 .cta-actions .btn { white-space: nowrap; }
 
 @media (min-width: 1024px) {
-  .hero-testimonials { position: relative; overflow: visible; }
+  .hero-testimonials { overflow: visible; }
   .hero-testimonials::after {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto auto;
     width: min(370px, 25vw);
     height: min(370px, 30vw);
-    background: url("https://lk.wissenglanz.in/i/b9fb1b0f-c783-4ae3-9f46-4ab823129fd7.png") center/cover no-repeat;
-    opacity: 0.95;
-    pointer-events: none;
+    right: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.65;
   }
 }
 
