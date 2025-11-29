@@ -168,4 +168,8 @@ main {
   .policy-card {
     padding: 16px;
   }
+
+  .policy-title {
+  line-height: 1.2;
+}
 }
