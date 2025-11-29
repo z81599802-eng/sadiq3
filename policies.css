@@ -1,13 +1,13 @@
 :root {
-  --bg: #0d0f14;
-  --surface: #131824;
-  --surface-alt: #1b2333;
-  --text: #e6ecff;
-  --muted: #a9b4d0;
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-alt: #eef2ff;
+  --text: #0f172a;
+  --muted: #4b5563;
   --accent: #7c5dff;
   --accent-soft: rgba(124, 93, 255, 0.12);
-  --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-  --border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+  --border: #e5e7eb;
 }
 
 * {
@@ -16,9 +16,9 @@
 
 body {
   margin: 0;
-  font-family: 'Space Grotesk', 'Sora', system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at 20% 20%, rgba(124, 93, 255, 0.14), transparent 25%),
-    radial-gradient(circle at 80% 0%, rgba(0, 188, 212, 0.1), transparent 20%),
+  font-family: 'Sora', 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at 20% 20%, rgba(124, 93, 255, 0.08), transparent 26%),
+    radial-gradient(circle at 80% 0%, rgba(0, 188, 212, 0.08), transparent 24%),
     var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -48,22 +48,21 @@ main {
   gap: 8px;
   padding: 10px 14px;
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--surface-alt);
   color: var(--text);
   text-decoration: none;
-  border: 1px solid var(--border);
-  transition: transform 150ms ease, background 150ms ease, border 150ms ease;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  transition: background 150ms ease, color 150ms ease;
+  box-shadow: none;
+  border: none;
 }
 
 .back-link:hover {
-  transform: translateY(-2px);
-  background: var(--surface-alt);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(124, 93, 255, 0.12);
+  color: #5534c6;
 }
 
 .policy-hero {
-  background: linear-gradient(145deg, var(--surface), var(--surface-alt));
+  background: linear-gradient(145deg, var(--surface), #f8f7ff);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 32px;
@@ -77,8 +76,8 @@ main {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(124, 93, 255, 0.12), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(0, 188, 212, 0.12), transparent 25%);
+  background: radial-gradient(circle at 20% 20%, rgba(124, 93, 255, 0.1), transparent 32%),
+    radial-gradient(circle at 80% 0%, rgba(0, 188, 212, 0.1), transparent 28%);
   pointer-events: none;
 }
 
@@ -110,18 +109,19 @@ main {
   gap: 18px;
 }
 
+
 .policy-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 18px 20px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
 }
 
 .policy-card h3 {
   margin: 0 0 8px;
   font-size: 1.05rem;
-  color: #f5f7ff;
+  color: #111827;
 }
 
 .policy-card p,
