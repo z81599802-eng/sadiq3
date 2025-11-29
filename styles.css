@@ -425,7 +425,7 @@ button, .btn {
   .pricing-grid { scrollbar-width: none; }
   .pricing-card {min-width: min(88vw, 440px); scroll-snap-align: start; }
   .hero { padding: 4.5rem 6vw; }
-  .hero-main { padding: 3.25rem 1.5rem 9rem; min-height: clamp(520px, 95vh, 760px); }
+  .hero-main { padding: 3.25rem 1.5rem 7.5rem; min-height: clamp(520px, 95vh, 760px); }
   .hero-content { gap: 0.9rem; }
   .hero-main h1 { font-size: clamp(2.4rem, 6vw, 3.1rem); margin-bottom: 0.9rem; }
   .hero-actions { margin-top: 0.4rem; margin-bottom: clamp(1.25rem, 5vw, 2rem); }
@@ -443,7 +443,7 @@ button, .btn {
 }
 
 @media (max-width: 480px) {
-  .hero-main { padding: 3.25rem 1.5rem 9rem; min-height: clamp(520px, 95vh, 760px); }
+  .hero-main { padding: 3.25rem 1.5rem 7.5rem; min-height: clamp(520px, 95vh, 760px); }
   .hero-content { gap: 0.9rem; }
   .hero-main h1 { font-size: clamp(2.4rem, 6vw, 3.1rem); margin-bottom: 0.9rem;  }
   .hero-actions { margin-top: 0.4rem; margin-bottom: clamp(1.25rem, 5vw, 2rem); }
@@ -467,6 +467,14 @@ button, .btn {
   .footer-bottom { align-items: center; text-align: center; padding: 1.5rem clamp(1.5rem, 8vw, 5rem) 0; }
 }
 
+@media (max-width: 768px) {
+  .hero-main + section,
+  .hero-main + .hero,
+  .hero-main + div {
+    margin-top: 8rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .01ms !important; animation-iteration-count: 1 !important;
       transition-duration: .01ms !important; scroll-behavior: auto !important; }
@@ -476,5 +484,11 @@ button, .btn {
   /* this targets touch devices */
   a, button, .card {
     -webkit-tap-highlight-color: transparent;
+  }
+
+  .pricing-card:hover {
+    background: #f5f7fa;
+    transform: none;
+    box-shadow: var(--shadow-subtle);
   }
 }
