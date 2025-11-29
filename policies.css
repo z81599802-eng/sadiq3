@@ -16,8 +16,8 @@
 
 body {
   margin: 0;
-  font-family: 'Sora', 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at 20% 20%, rgba(124, 93, 255, 0.08), transparent 26%),
+  font-family: 'Space Grotesk', 'Sora', system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at 20% 20%, rgba(124, 93, 255, 0.14), transparent 25%),
     radial-gradient(circle at 80% 0%, rgba(0, 188, 212, 0.08), transparent 24%),
     var(--bg);
   color: var(--text);
@@ -48,17 +48,14 @@ main {
   gap: 8px;
   padding: 10px 14px;
   border-radius: 999px;
-  background: var(--surface-alt);
   color: var(--text);
   text-decoration: none;
-  transition: background 150ms ease, color 150ms ease;
   box-shadow: none;
   border: none;
 }
 
 .back-link:hover {
-  background: rgba(124, 93, 255, 0.12);
-  color: #5534c6;
+  color: #4b5563;
 }
 
 .policy-hero {
@@ -109,13 +106,12 @@ main {
   gap: 18px;
 }
 
-
 .policy-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 18px 20px;
-  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.018);
 }
 
 .policy-card h3 {
