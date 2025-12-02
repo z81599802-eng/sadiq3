@@ -64,22 +64,14 @@ body { display: flex; min-height: 100vh; }
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: var(--color-primary);
   text-decoration: none;
 }
 
-.brand-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(31, 58, 147, 0.9) 0%, rgba(88, 102, 195, 0.85) 100%);
-  box-shadow: var(--shadow-elevated);
-}
-
-.brand-text {
-  letter-spacing: 0.04em;
+.brand-logo-img {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .sidebar-nav ul {
