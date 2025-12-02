@@ -88,18 +88,8 @@ button, .btn {
   padding: 0.75rem 3vw; max-width: 1100px; margin: 0 auto; gap: 1.25rem;
   position: relative;
 }
-.brand {
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.brand-logo-img {
-  height: 42px;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-}
+.brand { display: inline-flex; align-items: center; text-decoration: none; }
+.brand-logo-img { height: 42px; width: auto; max-width: 100%; object-fit: contain; }
 .nav-links { display: flex; gap: 1.5rem; align-items: center; }
 .nav-links a { color: var(--color-text); font-weight: 500; position: relative; padding-bottom: .2rem; }
 .nav-links a::after { content: ""; position: absolute; left: 0; bottom: -.25rem; width: 0; height: 2px; background: var(--color-primary); transition: var(--transition-base); }
