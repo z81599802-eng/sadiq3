@@ -24,6 +24,7 @@
   const faqItems = document.querySelectorAll('.faq-item');
   const yearTarget = document.querySelector('[data-current-year]');
   const typewriterTargets = document.querySelectorAll('[data-typewriter]');
+  const statCounters = document.querySelectorAll('[data-stat-target]');
 
   const setNavigationState = (isOpen) => {
     if (!navToggle || !navLinks) return;
@@ -178,6 +179,52 @@
   if (typewriterTargets.length) {
     typewriterTargets.forEach((element) => runTypewriter(element));
   }
+
+  const initStatCounters = () => {
+    if (!statCounters.length) return;
+
+    const animateValue = (element) => {
+      const target = Number(element.getAttribute('data-stat-target'));
+      const suffix = element.getAttribute('data-stat-suffix') || '';
+      const decimals = Number(element.getAttribute('data-stat-decimals') || 0);
+
+      if (Number.isNaN(target)) return;
+
+      if (prefersReducedMotion) {
+        element.textContent = `${target.toFixed(decimals)}${suffix}`;
+        return;
+      }
+
+      const duration = 1500;
+      const start = performance.now();
+
+      const step = (timestamp) => {
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const current = target * progress;
+        const formatted = current.toFixed(decimals);
+        element.textContent = `${formatted}${suffix}`;
+
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+
+      window.requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver((entries, entryObserver) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateValue(entry.target);
+          entryObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.35 });
+
+    statCounters.forEach((counter) => observer.observe(counter));
+  };
+
+  initStatCounters();
 
   const initTestimonialSlider = () => {
     const slider = document.querySelector('[data-testimonial-slider]');
