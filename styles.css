@@ -229,9 +229,9 @@ button, .btn {
 .page-hero .align-center .pill { align-self: center; }
 .hero-typewriter { align-items: center; }
 
-.about-section { max-width: 1100px; margin: clamp(3rem, 6vw, 4.5rem) auto; padding: 0 3vw; display: flex; flex-direction: column; gap: clamp(1.75rem, 4vw, 2.5rem); }
+.about-section { width: min(1240px, 96vw); margin: clamp(2.5rem, 5vw, 4rem) auto; padding: 0 clamp(0.75rem, 2vw, 1.5rem); display: flex; flex-direction: column; gap: clamp(1.75rem, 4vw, 2.5rem); }
 
-.mission-grid, .problem-grid, .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+.mission-grid, .problem-grid, .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
 .about-card, .problem-card, .value-card { background: #fff; border: 1px solid var(--color-border); border-radius: 18px; padding: 1.4rem 1.5rem; box-shadow: var(--shadow-subtle); position: relative; overflow: hidden; }
 .about-card h3, .problem-card h3, .value-card h3 { margin: 0 0 .4rem; color: var(--color-primary); font-size: 1.25rem; }
 .about-card p, .problem-card p, .value-card p { margin: 0; color: rgba(31,31,46,.8); }
@@ -260,8 +260,8 @@ button, .btn {
 .team-panel { display: flex; flex-direction: column; gap: 1rem; align-self: stretch; justify-content: center; }
 .team-highlight { background: #fff; border: 1px solid var(--color-border); border-radius: 16px; padding: 1.2rem 1.3rem; box-shadow: var(--shadow-subtle); display: flex; flex-direction: column; gap: 0.5rem; height: 100%; }
 
-.contact-section { background: var(--color-surface); border-radius: 24px; padding: clamp(2rem, 4vw, 2.5rem); box-shadow: var(--shadow-soft); }
-.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.about-section.contact-section { background: transparent; border-radius: 0; padding: 0; box-shadow: none; }
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
 .contact-card { background: #fff; border: 1px solid var(--color-border); border-radius: 16px; padding: 1.25rem 1.35rem; box-shadow: var(--shadow-subtle); }
 
 .text-link { color: var(--color-primary); font-weight: 600; text-decoration: underline; }
@@ -273,13 +273,18 @@ button, .btn {
 .cta-banner { background: var(--gradient-hero); color: #fff; border-radius: 28px; padding: clamp(2.4rem, 5vw, 3rem); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; align-items: center; box-shadow: var(--shadow-soft); }
 .cta-banner h2 { margin: 0; font-size: clamp(1.9rem, 2.4vw + 1rem, 2.5rem); }
 .cta-banner p { margin: .5rem 0 0; color: rgba(255,255,255,.9); }
-.cta-banner .cta-actions { justify-content: flex-start; flex-direction: column; align-items: flex-start; }
+.cta-banner .cta-actions { justify-content: flex-end; flex-direction: row; align-items: center; width: 100%; }
 
 @media (max-width: 640px) {
   .page-hero { margin: 2rem auto; }
   .page-hero-visual { align-items: stretch; }
   .hero-panel { max-width: 100%; }
   .cta-banner { grid-template-columns: 1fr; }
+  .mission-grid, .problem-grid, .values-grid, .contact-grid { gap: 0.85rem; }
+  .about-card, .problem-card, .value-card, .contact-card, .stat-card { padding: 1rem 1.05rem; }
+  .about-card h3, .problem-card h3, .value-card h3 { font-size: 1.1rem; }
+  .stat-value { font-size: 1.85rem; }
+  .stat-label { font-size: 0.95rem; }
 }
 
 /* ============ feature/persona/pricing ============ */
@@ -497,6 +502,7 @@ button, .btn {
   .hero-main h1 { font-size: clamp(2.8rem, 3.8vw + 1rem, 3.8rem); line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; text-align: center; margin-top: 0.25rem; margin-bottom: 1.25rem; }
   .feature-grid, .pricing-grid, .persona-grid, .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cta-actions { justify-content: center; }
+  .cta-banner .cta-actions { justify-content: flex-end; }
   .persona-card:nth-child(odd), .persona-card:nth-child(even) { transform: none; }
   .hero-visual { width: min(90vw, 680px); }
 }
@@ -522,6 +528,7 @@ button, .btn {
   .hero-description { font-size: 1rem; }
   .hero-cta { flex-direction: column; align-items: flex-start; padding: 3rem 2rem; }
   .cta-actions { width: 100%; justify-content: flex-start; }
+  .cta-banner .cta-actions { justify-content: flex-end; }
   .testimonial-title { font-size: 48px; line-height: 1.1; }
   .feature-card, .pricing-card, .testimonial-card { padding: 2rem; }
   .testimonial-card { padding: 3rem 1.75rem 2.25rem; }
