@@ -193,6 +193,75 @@ button, .btn {
   margin-top: clamp(15rem, 14vw, 11rem);
 }
 
+/* ============ about page ============ */
+.page-hero {
+  position: relative;
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: clamp(3rem, 5vw, 4rem) clamp(2rem, 4vw, 3.5rem);
+  border-radius: 36px;
+  background: linear-gradient(135deg, rgba(31, 58, 147, 0.08), rgba(146, 126, 249, 0.08));
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: center;
+  overflow: hidden;
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 60% at 80% 20%, rgba(31, 58, 147, 0.12), transparent 65%);
+  pointer-events: none;
+}
+
+.page-hero-content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.25rem; }
+.page-hero h1 { margin: 0; font-size: clamp(2.2rem, 3vw + 1rem, 3.2rem); color: var(--color-primary); }
+.page-hero-subtitle { margin: 0; color: rgba(31,58,147,.78); max-width: 44rem; }
+.page-hero .pill { align-self: flex-start; }
+
+.page-hero-visual { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
+.hero-badge { background: #fff; border: 1px solid var(--color-border); padding: 0.85rem 1.25rem; border-radius: 999px; font-weight: 600; color: var(--color-primary); box-shadow: var(--shadow-subtle); }
+.hero-panel { background: #fff; border-radius: 18px; padding: 1.5rem; border: 1px solid var(--color-border); box-shadow: var(--shadow-soft); max-width: 360px; }
+.panel-label { margin: 0 0 .35rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.01em; }
+.panel-body { margin: 0; color: var(--color-text); }
+
+.about-section { max-width: 1100px; margin: clamp(3rem, 6vw, 4.5rem) auto; padding: 0 3vw; display: flex; flex-direction: column; gap: clamp(1.75rem, 4vw, 2.5rem); }
+
+.mission-grid, .problem-grid, .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+.about-card, .problem-card, .value-card { background: #fff; border: 1px solid var(--color-border); border-radius: 18px; padding: 1.4rem 1.5rem; box-shadow: var(--shadow-subtle); }
+.about-card h3, .problem-card h3, .value-card h3 { margin: 0 0 .4rem; color: var(--color-primary); font-size: 1.25rem; }
+.about-card p, .problem-card p, .value-card p { margin: 0; color: rgba(31,31,46,.8); }
+
+.stats-section { background: var(--color-surface); border-radius: 28px; padding: clamp(2.5rem, 4vw, 3rem); box-shadow: var(--shadow-soft); }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.stat-card { background: #fff; border: 1px solid var(--color-border); border-radius: 16px; padding: 1.4rem; text-align: center; box-shadow: var(--shadow-subtle); }
+.stat-value { margin: 0; font-size: 2.1rem; font-weight: 700; color: var(--color-primary); }
+.stat-label { margin: .35rem 0 0; color: rgba(31,58,147,.8); font-weight: 500; }
+
+.values-section .section-intro { text-align: center; }
+.values-section .values-grid { margin-top: 1rem; }
+
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: start; }
+.team-copy { background: var(--color-surface); border-radius: 22px; padding: clamp(1.6rem, 3vw, 2.1rem); border: 1px solid var(--color-border); box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 1rem; }
+.team-copy h2 { margin: 0; color: var(--color-primary); font-size: clamp(1.8rem, 2.2vw + 1rem, 2.4rem); }
+.team-copy p { margin: 0; color: rgba(31,31,46,.85); }
+.team-cta { background: #fff; border-radius: 14px; padding: 1.1rem 1.25rem; border: 1px solid var(--color-border); box-shadow: var(--shadow-subtle); display: flex; flex-direction: column; gap: .75rem; }
+.team-panel { display: grid; gap: 1rem; }
+.team-highlight { background: #fff; border: 1px solid var(--color-border); border-radius: 16px; padding: 1.2rem 1.3rem; box-shadow: var(--shadow-subtle); }
+
+.cta-banner { background: var(--gradient-hero); color: #fff; border-radius: 28px; padding: clamp(2.4rem, 5vw, 3rem); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; align-items: center; box-shadow: var(--shadow-soft); }
+.cta-banner h2 { margin: 0; font-size: clamp(1.9rem, 2.4vw + 1rem, 2.5rem); }
+.cta-banner p { margin: .5rem 0 0; color: rgba(255,255,255,.9); }
+.cta-banner .cta-actions { justify-content: flex-start; }
+
+@media (max-width: 640px) {
+  .page-hero { margin: 2rem auto; }
+  .page-hero-visual { align-items: stretch; }
+  .hero-panel { max-width: 100%; }
+}
+
 /* ============ feature/persona/pricing ============ */
 .hero-features { text-align: center; background: var(--color-surface); border-radius: 40px; box-shadow: var(--shadow-subtle); }
 .section-intro h2 { font-size: clamp(2.2rem, 3vw + 1rem, 3rem); color: var(--color-primary); margin: 0; }
